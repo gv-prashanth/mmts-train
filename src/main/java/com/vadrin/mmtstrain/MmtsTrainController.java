@@ -22,6 +22,7 @@ public class MmtsTrainController {
 
 	@RequestMapping(value = { "/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) throws IOException {
+		System.out.println(requestBody.toString());
 		String requestType = requestBody.get("request").get("type").asText();
 		if (requestType.equalsIgnoreCase("LaunchRequest")) {
 			return constructAlexaResponse(WELCOME_RESPONSE, false);
@@ -30,7 +31,6 @@ public class MmtsTrainController {
 		} else if (requestType.equalsIgnoreCase("IntentRequest")
 				&& requestBody.get("request").get("intent").get("name").asText().equalsIgnoreCase("findMMTS")) {
 			JsonNode allSlots = requestBody.get("request").get("intent").get("slots");
-			System.out.println(allSlots.toString());
 			if (allSlots.get("time").has("value")) {
 				return constructAlexaResponse(
 						getMmtsTime(allSlots.get("from").get("value").asText(),
