@@ -32,8 +32,16 @@ public class TrainScheduleService {
 		String fromId = stationNameToIDService.getID(from);
 		String toId = stationNameToIDService.getID(to);
 		TrainInfo[] allSchedules = getSchedule(fromId, toId, Util.increaseHours(time, -1), Util.increaseHours(time, 1));
-		return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
-				+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
+		if (allSchedules.length > 1) {
+			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
+					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime()
+					+ " today. The next one is at " + allSchedules[1].getStarttime() + " today.";
+		} else if (allSchedules.length > 0) {
+			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
+					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
+		} else {
+			return "Unfortunately. I dont see any trains around the time yuo have mentioned.";
+		}
 	}
 
 }
