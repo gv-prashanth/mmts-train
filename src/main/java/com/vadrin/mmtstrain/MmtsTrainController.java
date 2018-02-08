@@ -41,6 +41,11 @@ public class MmtsTrainController {
 		// TODO Auto-generated method stub
 		return "Ok. I found an mmts from " + from + " to " + to + " at " + time + " today.";
 	}
+	
+	private String getMmtsTime(String from, String to) {
+		// TODO Auto-generated method stub
+		return "Ok. The next mmts from " + from + " to " + to + " is at " + "some time" + " today.";
+	}
 
 	private AlexaResponse constructAlexaResponse(String response, boolean endSession) {
 		Map<String, Object> speech = new HashMap<String, Object>();
