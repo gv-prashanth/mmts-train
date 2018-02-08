@@ -30,8 +30,16 @@ public class MmtsTrainController {
 		} else if (requestType.equalsIgnoreCase("IntentRequest")
 				&& requestBody.get("request").get("intent").get("name").asText().equalsIgnoreCase("findMMTS")) {
 			JsonNode allSlots = requestBody.get("request").get("intent").get("slots");
-			return constructAlexaResponse(getMmtsTime(allSlots.get("from").get("value").asText(),
-					allSlots.get("to").get("value").asText(), allSlots.get("time").get("value").asText()), true);
+			if (allSlots.get("time").has("value")) {
+				return constructAlexaResponse(
+						getMmtsTime(allSlots.get("from").get("value").asText(),
+								allSlots.get("to").get("value").asText(), allSlots.get("time").get("value").asText()),
+						true);
+			} else {
+				return constructAlexaResponse(getMmtsTime(allSlots.get("from").get("value").asText(),
+						allSlots.get("to").get("value").asText()), true);
+			}
+
 		} else {
 			return constructAlexaResponse(DIDNT_UNDERSTAND_RESPONSE, false);
 		}
@@ -41,7 +49,7 @@ public class MmtsTrainController {
 		// TODO Auto-generated method stub
 		return "Ok. I found an mmts from " + from + " to " + to + " at " + time + " today.";
 	}
-	
+
 	private String getMmtsTime(String from, String to) {
 		// TODO Auto-generated method stub
 		return "Ok. The next mmts from " + from + " to " + to + " is at " + "some time" + " today.";
