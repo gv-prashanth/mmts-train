@@ -1,6 +1,5 @@
 package com.vadrin.mmtstrain;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +40,7 @@ public class MmtsTrainController {
 				JsonNode slots = requestBody.get("request").get("intent").get("slots");
 				String from = slots.get("from").get("value").asText();
 				String to = slots.get("to").get("value").asText();
-				String time = "1500";
-				if (slots.get("time").has("value"))
-					time = slots.get("time").get("value").asText();
+				String time = slots.get("time").get("value").asText();
 				String responseString = trainScheduleService.getResponseString(from, to, time);
 				return alexaServices.constructAlexaResponse(responseString, true);
 			default:

@@ -74,7 +74,6 @@ public class StationNameToIDService {
 	}
 	
 	public String getID(String stationName){
-		System.out.println(namIDMap.get(stationName));
 		return namIDMap.get(stationName);
 	}
 }

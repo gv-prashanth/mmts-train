@@ -31,9 +31,7 @@ public class TrainScheduleService {
 	public String getResponseString(String from, String to, String time) throws ParseException {
 		String fromId = stationNameToIDService.getID(from);
 		String toId = stationNameToIDService.getID(to);
-		String lowerTime = Util.increaseHours(time, -1);
-		String upperTime = Util.increaseHours(time, 1);
-		TrainInfo[] allSchedules = getSchedule(fromId, toId, lowerTime, upperTime);
+		TrainInfo[] allSchedules = getSchedule(fromId, toId, Util.increaseHours(time, -1), Util.increaseHours(time, 1));
 		return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 				+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
 	}
