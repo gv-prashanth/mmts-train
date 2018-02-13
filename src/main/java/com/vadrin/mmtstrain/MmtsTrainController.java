@@ -38,11 +38,15 @@ public class MmtsTrainController {
 			switch (intentName) {
 			case "findMMTS":
 				JsonNode slots = requestBody.get("request").get("intent").get("slots");
-				String from = slots.get("from").get("value").asText();
-				String to = slots.get("to").get("value").asText();
-				String time = slots.get("time").get("value").asText();
-				String responseString = trainScheduleService.getResponseString(from, to, time);
-				return alexaServices.constructAlexaResponse(responseString, true);
+				if(slots.get("from").has("value") && slots.get("to").has("value") && slots.get("time").has("value")){
+					String from = slots.get("from").get("value").asText();
+					String to = slots.get("to").get("value").asText();
+					String time = slots.get("time").get("value").asText();
+					String responseString = trainScheduleService.getResponseString(from, to, time);
+					return alexaServices.constructAlexaResponse(responseString, true);
+				}else{
+					return alexaServices.constructAlexaResponse(DIDNT_UNDERSTAND_RESPONSE, false);
+				}
 			default:
 				return alexaServices.constructAlexaResponse(DIDNT_UNDERSTAND_RESPONSE, false);
 			}

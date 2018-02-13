@@ -40,7 +40,7 @@ public class TrainScheduleService {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
 		} else {
-			return "Unfortunately. I dont see any trains around the time yuo have mentioned.";
+			return "Unfortunately. I dont see any trains around the time you have mentioned.";
 		}
 	}
 
