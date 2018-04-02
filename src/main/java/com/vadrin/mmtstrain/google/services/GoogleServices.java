@@ -23,12 +23,12 @@ public class GoogleServices {
 		messages.setSubtitle("MMTS Train");
 		messages.setImageUrl(
 				"https://lh3.ggpht.com/i8pFz2qe9qbp9NXwOr4HCd_0vnHMx0I98wwD_La6kI_42MDQgOAN4osZXnFzOoF4FQ=w200");
-		googleResponse.setMessages(messages);
+		//googleResponse.setMessages(messages);
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("google", getGoogleData(response, endSession));
-		googleResponse.setData(data);
+		//googleResponse.setData(data);
 		googleResponse.setSource("mmts-train.herokuapp.com");
 		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;

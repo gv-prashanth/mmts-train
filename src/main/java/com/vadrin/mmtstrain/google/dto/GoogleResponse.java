@@ -1,13 +1,11 @@
 package com.vadrin.mmtstrain.google.dto;
 
-import java.util.Map;
-
 public class GoogleResponse {
 
 	private String speech;
 	private String displayText;
-	private Messages messages;
-	private Map<String, Object> data;
+	//private Messages messages;
+	//private Map<String, Object> data;
 	private String source;
 
 	public String getSource() {
@@ -17,7 +15,7 @@ public class GoogleResponse {
 	public void setSource(String source) {
 		this.source = source;
 	}
-
+	/*
 	public Map<String, Object> getData() {
 		return data;
 	}
@@ -25,6 +23,15 @@ public class GoogleResponse {
 	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
+	
+	public Messages getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Messages messages) {
+		this.messages = messages;
+	}
+	*/
 
 	public String getSpeech() {
 		return speech;
@@ -40,14 +47,6 @@ public class GoogleResponse {
 
 	public void setDisplayText(String displayText) {
 		this.displayText = displayText;
-	}
-
-	public Messages getMessages() {
-		return messages;
-	}
-
-	public void setMessages(Messages messages) {
-		this.messages = messages;
 	}
 
 }
