@@ -67,7 +67,7 @@ public class MmtsTrainController {
 	@RequestMapping(value = { "/google" }, method = { RequestMethod.POST })
 	public JsonNode getGoogleChat(@RequestBody JsonNode requestBody) throws ParseException, JsonParseException, JsonMappingException, IOException {
 		System.out.println("request is - " + requestBody.toString());
-		return Util.getJsonFromString("{ \"speech\": \"this text is spoken out loud if the platform supports voice interactions\", \"displayText\": \"this text is displayed visually\", \"messages\": { \"type\": 1, \"title\": \"card title\", \"subtitle\": \"card text\", \"imageUrl\": \"https://assistant.google.com/static/images/molecule/Molecule-Formation-stop.png\" }, \"data\": { \"google\": { \"expectUserResponse\": true, \"richResponse\": { \"items\": [ { \"simpleResponse\": { \"textToSpeech\": \"this is a simple response\" } } ] } }, \"facebook\": { \"text\": \"Hello, Facebook!\" }, \"slack\": { \"text\": \"This is a text response for Slack.\" } }, \"contextOut\": [ { \"name\": \"context name\", \"lifespan\": 5, \"parameters\": { \"param\": \"param value\" } } ], \"source\": \"example.com\", \"followupEvent\": { \"name\": \"event name\", \"parameters\": { \"param\": \"param value\" } } }");
+		return Util.getJsonFromString("{ \"speech\": \"this text is spoken out loud if the platform supports voice interactions\", \"displayText\": \"this text is displayed visually\", \"source\": \"example.com}");
 		/*
 		if (requestBody.has("result") && requestBody.get("result").has("metadata")  && requestBody.get("result").get("metadata").has("intentName")) {
 			String intentName = requestBody.get("result").get("metadata").get("intentName").asText();
@@ -89,6 +89,5 @@ public class MmtsTrainController {
 			return googleServices.constructGoogleResponse(DIDNT_UNDERSTAND_RESPONSE, false);
 		}
 		*/
-		
 	}
 }
