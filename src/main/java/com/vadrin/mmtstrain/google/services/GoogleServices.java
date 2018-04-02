@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.vadrin.mmtstrain.google.dto.GoogleResponse;
 import com.vadrin.mmtstrain.google.dto.Messages;
+import com.vadrin.mmtstrain.utils.Util;
 
 @Component
 public class GoogleServices {
@@ -19,6 +20,7 @@ public class GoogleServices {
 		googleResponse.setMessages(messages);
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
+		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;
 	}
 

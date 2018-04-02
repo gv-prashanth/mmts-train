@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.vadrin.mmtstrain.alexa.dto.AlexaCardAndSpeech;
 import com.vadrin.mmtstrain.alexa.dto.AlexaResponse;
+import com.vadrin.mmtstrain.utils.Util;
 
 @Component
 public class AlexaServices {
@@ -27,8 +28,9 @@ public class AlexaServices {
 		image.put("largeImageUrl",
 				"https://lh4.ggpht.com/8X59wxLd8TakKdaOHTmf0teySL2-S7VoMlxk6DyUiq27nCqzVt5T4DLrlCaC7oSZkn4");
 		card.put("image", image);
-
-		return new AlexaResponse("1.0", new HashMap<String, Object>(), new AlexaCardAndSpeech(speech, card, true));
+		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(), new AlexaCardAndSpeech(speech, card, true));
+		System.out.println("respose is - " +Util.getJson(toReturn).toString());
+		return toReturn;
 	}
 	
 }

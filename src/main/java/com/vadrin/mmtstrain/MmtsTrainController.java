@@ -31,6 +31,7 @@ public class MmtsTrainController {
 
 	@RequestMapping(value = { "/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) throws ParseException {
+		System.out.println("request is - " + requestBody.toString());
 		String requestType = requestBody.get("request").get("type").asText();
 		switch (requestType) {
 		case "LaunchRequest":
@@ -61,7 +62,7 @@ public class MmtsTrainController {
 
 	@RequestMapping(value = { "/google" }, method = { RequestMethod.POST })
 	public GoogleResponse getGoogleChat(@RequestBody JsonNode requestBody) throws ParseException {
-		System.out.println("received request " + requestBody.toString());
+		System.out.println("request is - " + requestBody.toString());
 		if (requestBody.has("result") && requestBody.get("result").has("intentName")) {
 			String intentName = requestBody.get("result").get("intentName").asText();
 			switch (intentName) {
