@@ -1,47 +1,21 @@
 package com.vadrin.mmtstrain.google.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class GoogleResponse {
 
 	private String speech;
 	private String displayText;
 	private Messages messages;
-	private Object data;
-	private List<Object> contextOut;
-	private String source;
-	private Object followupEvent;
+	private Map<String, Object> data;
 
-	public Object getData() {
+	public Map<String, Object> getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(Map<String, Object> data) {
 		this.data = data;
-	}
-
-	public List<Object> getContextOut() {
-		return contextOut;
-	}
-
-	public void setContextOut(List<Object> contextOut) {
-		this.contextOut = contextOut;
-	}
-
-	public String getSource() {
-		return source;
-	}
-
-	public void setSource(String source) {
-		this.source = source;
-	}
-
-	public Object getFollowupEvent() {
-		return followupEvent;
-	}
-
-	public void setFollowupEvent(Object followupEvent) {
-		this.followupEvent = followupEvent;
 	}
 
 	public String getSpeech() {

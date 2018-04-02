@@ -1,5 +1,8 @@
 package com.vadrin.mmtstrain.google.services;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 import com.vadrin.mmtstrain.google.dto.GoogleResponse;
@@ -20,6 +23,12 @@ public class GoogleServices {
 		googleResponse.setMessages(messages);
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> googleData = new HashMap<String, Object>();
+		googleData.put("expectUserResponse", !endSession);
+		googleData.put("text", response);
+		data.put("google", googleData);
+		googleResponse.setData(data);
 		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;
 	}
