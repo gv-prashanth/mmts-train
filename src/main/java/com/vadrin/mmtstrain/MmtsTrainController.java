@@ -76,7 +76,8 @@ public class MmtsTrainController {
 				if (slots.has("from") && slots.has("to")) {
 					String from = slots.get("from").asText();
 					String to = slots.get("to").asText();
-					String responseString = trainScheduleService.getResponseString(from, to);
+					String time = slots.get("around").asText();
+					String responseString = trainScheduleService.getResponseString(from, to, time);
 					return googleServices.constructGoogleResponse(responseString, true);
 				} else {
 					return googleServices.constructGoogleResponse(DIDNT_UNDERSTAND_RESPONSE, false);
