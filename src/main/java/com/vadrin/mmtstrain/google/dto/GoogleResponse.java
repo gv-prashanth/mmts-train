@@ -1,6 +1,5 @@
 package com.vadrin.mmtstrain.google.dto;
 
-import java.util.List;
 import java.util.Map;
 
 public class GoogleResponse {

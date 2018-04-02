@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.google.dto.GoogleResponse;
 import com.vadrin.mmtstrain.google.dto.Messages;
 import com.vadrin.mmtstrain.utils.Util;
@@ -24,13 +27,26 @@ public class GoogleServices {
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
 		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Object> googleData = new HashMap<String, Object>();
-		googleData.put("expectUserResponse", !endSession);
-		googleData.put("text", response);
-		data.put("google", googleData);
+		data.put("google", getGoogleData(response, endSession));
 		googleResponse.setData(data);
 		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;
+	}
+
+	private Object getGoogleData(String response, boolean endSession) {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode toReturn = mapper.createObjectNode();
+		toReturn.put("expectUserResponse", !endSession);
+		ObjectNode richResponse = mapper.createObjectNode();
+		ArrayNode items = mapper.createArrayNode();
+		ObjectNode item = mapper.createObjectNode();
+		ObjectNode simpleResponse = mapper.createObjectNode();
+		simpleResponse.put("textToSpeech", response);
+		item.put("simpleResponse", simpleResponse);
+		items.add(item);
+		richResponse.put("items", items);
+		toReturn.put("richResponse", richResponse);
+		return Util.getMapFromJson(toReturn);
 	}
 
 }
