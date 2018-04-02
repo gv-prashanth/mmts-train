@@ -74,6 +74,6 @@ public class StationNameToIDService {
 	}
 	
 	public String getID(String stationName){
-		return namIDMap.get(stationName);
+		return namIDMap.get(stationName.toLowerCase());
 	}
 }
