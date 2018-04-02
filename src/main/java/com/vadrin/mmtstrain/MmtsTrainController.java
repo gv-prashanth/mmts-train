@@ -63,8 +63,8 @@ public class MmtsTrainController {
 	@RequestMapping(value = { "/google" }, method = { RequestMethod.POST })
 	public GoogleResponse getGoogleChat(@RequestBody JsonNode requestBody) throws ParseException {
 		System.out.println("request is - " + requestBody.toString());
-		if (requestBody.has("result") && requestBody.get("result").has("intentName")) {
-			String intentName = requestBody.get("result").get("intentName").asText();
+		if (requestBody.has("result") && requestBody.get("result").has("metadata")  && requestBody.get("result").get("metadata").has("intentName")) {
+			String intentName = requestBody.get("result").get("metadata").get("intentName").asText();
 			switch (intentName) {
 			case "findMMTS":
 				JsonNode slots = requestBody.get("result").get("parameters");
