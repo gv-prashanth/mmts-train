@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.dto;
+package com.vadrin.mmtstrain.mmtsservices.dto;
 
 public class TrainInfo {
 

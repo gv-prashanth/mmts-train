@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vadrin.mmtstrain.alexa.dto.AlexaResponse;
 import com.vadrin.mmtstrain.alexa.services.AlexaServices;
-import com.vadrin.mmtstrain.services.TrainScheduleService;
+import com.vadrin.mmtstrain.google.dto.GoogleResponse;
+import com.vadrin.mmtstrain.google.services.GoogleServices;
+import com.vadrin.mmtstrain.mmtsservices.TrainScheduleService;
 
 @RestController
 public class MmtsTrainController {
@@ -24,6 +26,8 @@ public class MmtsTrainController {
 	TrainScheduleService trainScheduleService;
 	@Autowired
 	AlexaServices alexaServices;
+	@Autowired
+	GoogleServices googleServices;
 
 	@RequestMapping(value = { "/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) throws ParseException {
@@ -38,13 +42,13 @@ public class MmtsTrainController {
 			switch (intentName) {
 			case "findMMTS":
 				JsonNode slots = requestBody.get("request").get("intent").get("slots");
-				if(slots.get("from").has("value") && slots.get("to").has("value") && slots.get("time").has("value")){
+				if (slots.get("from").has("value") && slots.get("to").has("value") && slots.get("time").has("value")) {
 					String from = slots.get("from").get("value").asText();
 					String to = slots.get("to").get("value").asText();
 					String time = slots.get("time").get("value").asText();
 					String responseString = trainScheduleService.getResponseString(from, to, time);
 					return alexaServices.constructAlexaResponse(responseString, true);
-				}else{
+				} else {
 					return alexaServices.constructAlexaResponse(DIDNT_UNDERSTAND_RESPONSE, false);
 				}
 			default:
@@ -52,6 +56,30 @@ public class MmtsTrainController {
 			}
 		default:
 			return alexaServices.constructAlexaResponse(DIDNT_UNDERSTAND_RESPONSE, false);
+		}
+	}
+
+	@RequestMapping(value = { "/google" }, method = { RequestMethod.POST })
+	public GoogleResponse getGoogleChat(@RequestBody JsonNode requestBody) throws ParseException {
+		System.out.println("received request " + requestBody.toString());
+		if (requestBody.has("result") && requestBody.get("result").has("intentName")) {
+			String intentName = requestBody.get("result").get("intentName").asText();
+			switch (intentName) {
+			case "findMMTS":
+				JsonNode slots = requestBody.get("result").get("parameters");
+				if (slots.has("from") && slots.has("to")) {
+					String from = slots.get("from").asText();
+					String to = slots.get("to").asText();
+					String responseString = trainScheduleService.getResponseString(from, to);
+					return googleServices.constructGoogleResponse(responseString, true);
+				} else {
+					return googleServices.constructGoogleResponse(DIDNT_UNDERSTAND_RESPONSE, false);
+				}
+			default:
+				return googleServices.constructGoogleResponse(DIDNT_UNDERSTAND_RESPONSE, false);
+			}
+		} else {
+			return googleServices.constructGoogleResponse(DIDNT_UNDERSTAND_RESPONSE, false);
 		}
 	}
 }
