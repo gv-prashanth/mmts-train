@@ -67,7 +67,7 @@ public class MmtsTrainController {
 	@RequestMapping(value = { "/google" }, method = { RequestMethod.POST })
 	public JsonNode getGoogleChat(@RequestBody JsonNode requestBody) throws ParseException, JsonParseException, JsonMappingException, IOException {
 		System.out.println("request is - " + requestBody.toString());
-		return Util.getJsonFromString("{ \"speech\": \"this text is spoken out loud if the platform supports voice interactions\", \"displayText\": \"this text is displayed visually\", \"source\": \"example.com}");
+		return Util.getJsonFromString("{ \"speech\": \"this text is spoken out loud if the platform supports voice interactions\", \"displayText\": \"this text is displayed visually\", \"source\": \"example.com\"}");
 		/*
 		if (requestBody.has("result") && requestBody.get("result").has("metadata")  && requestBody.get("result").get("metadata").has("intentName")) {
 			String intentName = requestBody.get("result").get("metadata").get("intentName").asText();
