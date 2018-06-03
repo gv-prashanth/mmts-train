@@ -35,10 +35,10 @@ public class TrainScheduleService {
 		if (allSchedules.length > 1) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime()
-					+ " today. The next one is at " + allSchedules[1].getStarttime() + " today.";
+					+ " today. The next one is at " + allSchedules[1].getStarttime() + ".";
 		} else if (allSchedules.length > 0) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
-					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
+					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + ".";
 		} else {
 			return "Unfortunately. I dont see any trains around the time you have mentioned.";
 		}
@@ -51,12 +51,12 @@ public class TrainScheduleService {
 		if (allSchedules.length > 1) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime()
-					+ " today. The next one is at " + allSchedules[1].getStarttime() + " today.";
+					+ " today. The next one is at " + allSchedules[1].getStarttime() + ".";
 		} else if (allSchedules.length > 0) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
-					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + " today.";
+					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + ".";
 		} else {
-			return "Unfortunately. I dont see any trains around the time you have mentioned.";
+			return "Unfortunately. I dont see any trains for the stations you have mentioned.";
 		}
 	}
 
