@@ -47,7 +47,7 @@ public class MmtsTrainController {
 			switch (intentName) {
 			case "findMMTS":
 				JsonNode slots = requestBody.get("request").get("intent").get("slots");
-				if (slots.get("from").has("value") && slots.get("to").has("value") && slots.get("time").has("value")) {
+				if (slots.get("from").has("value") && slots.get("to").has("value") && slots.get("around").has("value")) {
 					String from = slots.get("from").get("value").asText();
 					String to = slots.get("to").get("value").asText();
 					String time = slots.get("around").get("value").asText();
