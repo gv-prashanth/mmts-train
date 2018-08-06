@@ -35,7 +35,7 @@ public class TrainScheduleService {
 		if (allSchedules.length > 1) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime()
-					+ " today. The next one is at " + allSchedules[1].getStarttime() + ".";
+					+ ". The next one is at " + allSchedules[1].getStarttime() + ".";
 		} else if (allSchedules.length > 0) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + ".";
