@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.google.dto;
+package com.vadrin.mmtstrain.services.google.dto;
 
 public class Messages {
 

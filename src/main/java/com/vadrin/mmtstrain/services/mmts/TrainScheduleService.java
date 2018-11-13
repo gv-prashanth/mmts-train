@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.mmtsservices;
+package com.vadrin.mmtstrain.services.mmts;
 
 import java.text.ParseException;
 
@@ -7,7 +7,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.vadrin.mmtstrain.mmtsservices.dto.TrainInfo;
+import com.vadrin.mmtstrain.services.mmts.dto.TrainInfo;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Component

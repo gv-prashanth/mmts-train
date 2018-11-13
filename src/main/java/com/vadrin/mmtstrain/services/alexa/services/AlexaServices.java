@@ -1,12 +1,12 @@
-package com.vadrin.mmtstrain.alexa.services;
+package com.vadrin.mmtstrain.services.alexa.services;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.vadrin.mmtstrain.alexa.dto.AlexaCardAndSpeech;
-import com.vadrin.mmtstrain.alexa.dto.AlexaResponse;
+import com.vadrin.mmtstrain.services.alexa.dto.AlexaCardAndSpeech;
+import com.vadrin.mmtstrain.services.alexa.dto.AlexaResponse;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Component

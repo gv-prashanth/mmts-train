@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain;
+package com.vadrin.mmtstrain.controllers;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.vadrin.mmtstrain.alexa.dto.AlexaResponse;
-import com.vadrin.mmtstrain.alexa.services.AlexaServices;
-import com.vadrin.mmtstrain.google.dto.GoogleResponse;
-import com.vadrin.mmtstrain.google.services.GoogleServices;
-import com.vadrin.mmtstrain.mmtsservices.TrainScheduleService;
+import com.vadrin.mmtstrain.services.alexa.dto.AlexaResponse;
+import com.vadrin.mmtstrain.services.alexa.services.AlexaServices;
+import com.vadrin.mmtstrain.services.google.dto.GoogleResponse;
+import com.vadrin.mmtstrain.services.google.services.GoogleServices;
+import com.vadrin.mmtstrain.services.mmts.TrainScheduleService;
 import com.vadrin.mmtstrain.utils.Util;
 
 @RestController

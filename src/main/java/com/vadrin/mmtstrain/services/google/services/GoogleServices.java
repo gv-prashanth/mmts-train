@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.google.services;
+package com.vadrin.mmtstrain.services.google.services;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.vadrin.mmtstrain.google.dto.GoogleResponse;
-import com.vadrin.mmtstrain.google.dto.Messages;
+import com.vadrin.mmtstrain.services.google.dto.GoogleResponse;
+import com.vadrin.mmtstrain.services.google.dto.Messages;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Component
