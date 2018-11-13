@@ -1,7 +1,5 @@
 package com.vadrin.mmtstrain.controllers;
 
-import java.net.URISyntaxException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +21,7 @@ public class MmtsTrainController {
 	DialogflowServices dialogflowServices;
 
 	@RequestMapping(value = { "/train" }, method = { RequestMethod.GET })
-	public Train[] getTrain(@RequestParam("requestQuery") String requestQuery) throws URISyntaxException {
+	public Train[] getTrain(@RequestParam("requestQuery") String requestQuery) {
 		Train[] toReturn;
 		System.out.println(requestQuery);
 		JsonNode dialogflowResponse = dialogflowServices.getIntentsAndEntitiesFromText(requestQuery);
