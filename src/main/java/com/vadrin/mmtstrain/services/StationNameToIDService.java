@@ -3,9 +3,9 @@ package com.vadrin.mmtstrain.services;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class StationNameToIDService {
 
 	private static final Map<String, String> namIDMap = new HashMap<String, String>();
