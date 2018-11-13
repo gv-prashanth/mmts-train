@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.services.mmts;
+package com.vadrin.mmtstrain.services;
 
 import java.util.HashMap;
 import java.util.Map;

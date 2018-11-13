@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.services.google.dto;
+package com.vadrin.mmtstrain.models;
 
 public class GoogleResponse {
 
