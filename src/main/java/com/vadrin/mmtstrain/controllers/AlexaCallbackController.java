@@ -21,17 +21,17 @@ public class AlexaCallbackController {
 	@Autowired
 	AlexaService alexaService;
 
-	@RequestMapping(value = { "/callback/alexa/findTrain" }, method = { RequestMethod.POST })
+	@RequestMapping(value = { "/callback/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
 		if (requestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Chat input = new Chat(
 					requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText());
-			Chat output = mmtsTrainController.converse("123", input);
+			Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
 			return alexaService.constructAlexaResponse(output);
 		} else {
 			Event input = new Event(requestBody.get("request").get("type").asText());
-			Chat output = mmtsTrainController.converse("123", input);
+			Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
 			return alexaService.constructAlexaResponse(output);
 		}
 	}

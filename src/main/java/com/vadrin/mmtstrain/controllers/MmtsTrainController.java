@@ -24,7 +24,7 @@ public class MmtsTrainController {
 	DialogflowResponseHandlerService dialogflowResponseHandlerService;
 
 	@RequestMapping(value = { "/conversation/id" }, method = { RequestMethod.GET })
-	public String initiateConverasation() {
+	public String createConversationId() {
 		return Util.generateRandomId();
 	}
 

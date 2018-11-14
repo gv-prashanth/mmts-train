@@ -20,7 +20,7 @@ public class GoogleHomeCallbackController {
 	@Autowired
 	GoogleHomeService googleHomeService;
 
-	@RequestMapping(value = { "/callback/google/findTrain" }, method = { RequestMethod.POST })
+	@RequestMapping(value = { "/callback/google" }, method = { RequestMethod.POST })
 	public GoogleResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
 		if (requestBody.get("result").get("metadata").has("intentName")) {
