@@ -1,6 +1,6 @@
-package com.vadrin.mmtstrain.mmtsservices.dto;
+package com.vadrin.mmtstrain.models;
 
-public class TrainInfo {
+public class Train {
 
 	private String trainname;
 	private String startstation;
@@ -9,7 +9,7 @@ public class TrainInfo {
 	private String stoptime;
 	private String runsonweekend;
 
-	public TrainInfo() {
+	public Train() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

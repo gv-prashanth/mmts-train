@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.google.dto;
+package com.vadrin.mmtstrain.models.googlehome;
 
 public class Messages {
 

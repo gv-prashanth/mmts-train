@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.alexa.dto;
+package com.vadrin.mmtstrain.models.alexa;
 
 import java.util.Map;
 

@@ -1,0 +1,66 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "mmts train",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "forwardUserInput",
+                    "slots": [
+                        {
+                            "name": "userInput",
+                            "type": "userInput"
+                        }
+                    ],
+                    "samples": [
+                        "I {userInput}",
+                        "{userInput}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "userInput",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "just a placeholder for text"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "anything"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "what is this?"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "I am awesome"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "I want water"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
