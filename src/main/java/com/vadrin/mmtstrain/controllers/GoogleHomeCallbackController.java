@@ -24,7 +24,7 @@ public class GoogleHomeCallbackController {
 	public GoogleResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
 		Chat input = new Chat(requestBody.get("result").get("parameters").get("userInput").asText());
-		Chat output = mmtsTrainController.converse(requestBody.get("sessionId").asText(), input);
+		Chat output = mmtsTrainController.converse("123456", input);
 		return googleHomeService.constructGoogleResponse(output);
 	}
 
