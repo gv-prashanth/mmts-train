@@ -33,7 +33,7 @@ public class TrainScheduleService {
 		try {
 			return getSchedule(fromId, toId, Util.increaseHours(time, -1), Util.increaseHours(time, 1));
 		} catch (ParseException e) {
-			return getSchedule(fromId, toId, "00:00", "24:00");
+			return getSchedule(fromId, toId, "01:00", "23:00");
 		}
 	}
 
