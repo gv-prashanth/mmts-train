@@ -22,15 +22,14 @@ public class GoogleHomeService {
 		messages.setType(1);
 		messages.setTitle("MMTS Train");
 		messages.setSubtitle("MMTS Train");
-		messages.setImageUrl(
-				"https://lh3.ggpht.com/i8pFz2qe9qbp9NXwOr4HCd_0vnHMx0I98wwD_La6kI_42MDQgOAN4osZXnFzOoF4FQ=w200");
+		messages.setImageUrl("https://mmts-train-timings.herokuapp.com/images/icon.png");
 		// googleResponse.setMessages(messages);
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("google", getGoogleData(response, endSession));
 		// googleResponse.setData(data);
-		googleResponse.setSource("mmts-train.herokuapp.com");
+		googleResponse.setSource("mmts-train-timings.herokuapp.com");
 		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;
 	}
