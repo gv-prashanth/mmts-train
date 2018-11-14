@@ -5,12 +5,13 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.alexa.AlexaCardAndSpeech;
 import com.vadrin.mmtstrain.models.alexa.AlexaResponse;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Service
-public class AlexaServices {
+public class AlexaService {
 
 	public AlexaResponse constructAlexaResponse(String response, boolean endSession) {
 		Map<String, Object> speech = new HashMap<String, Object>();
@@ -32,6 +33,10 @@ public class AlexaServices {
 				new AlexaCardAndSpeech(speech, card, endSession));
 		System.out.println("respose is - " + Util.getJson(toReturn).toString());
 		return toReturn;
+	}
+	
+	public AlexaResponse constructAlexaResponse(Chat chat) {
+		return constructAlexaResponse(chat.getMessage(), chat.isTheEnd());
 	}
 
 }

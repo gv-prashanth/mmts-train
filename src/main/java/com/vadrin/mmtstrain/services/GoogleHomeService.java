@@ -8,12 +8,13 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.googlehome.GoogleResponse;
 import com.vadrin.mmtstrain.models.googlehome.Messages;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Component
-public class GoogleHomeServices {
+public class GoogleHomeService {
 
 	public GoogleResponse constructGoogleResponse(String response, boolean endSession) {
 		GoogleResponse googleResponse = new GoogleResponse();
@@ -23,15 +24,19 @@ public class GoogleHomeServices {
 		messages.setSubtitle("MMTS Train");
 		messages.setImageUrl(
 				"https://lh3.ggpht.com/i8pFz2qe9qbp9NXwOr4HCd_0vnHMx0I98wwD_La6kI_42MDQgOAN4osZXnFzOoF4FQ=w200");
-		//googleResponse.setMessages(messages);
+		// googleResponse.setMessages(messages);
 		googleResponse.setDisplayText(response);
 		googleResponse.setSpeech(response);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("google", getGoogleData(response, endSession));
-		//googleResponse.setData(data);
+		// googleResponse.setData(data);
 		googleResponse.setSource("mmts-train.herokuapp.com");
 		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
 		return googleResponse;
+	}
+
+	public GoogleResponse constructGoogleResponse(Chat chat) {
+		return constructGoogleResponse(chat.getMessage(), chat.isTheEnd());
 	}
 
 	private Object getGoogleData(String response, boolean endSession) {

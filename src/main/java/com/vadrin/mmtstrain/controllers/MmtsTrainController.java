@@ -9,20 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vadrin.mmtstrain.models.Chat;
-import com.vadrin.mmtstrain.models.Train;
-import com.vadrin.mmtstrain.services.DialogflowServices;
-import com.vadrin.mmtstrain.services.TrainScheduleService;
+import com.vadrin.mmtstrain.models.Event;
+import com.vadrin.mmtstrain.services.DialogflowResponseHandlerService;
+import com.vadrin.mmtstrain.services.DialogflowService;
 import com.vadrin.mmtstrain.utils.Util;
 
 @RestController
 public class MmtsTrainController {
 
 	@Autowired
-	TrainScheduleService trainScheduleService;
+	DialogflowService dialogflowService;
+	
 	@Autowired
-	DialogflowServices dialogflowServices;
-
-	private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";
+	DialogflowResponseHandlerService dialogflowResponseHandlerService;
 
 	@RequestMapping(value = { "/conversation/id" }, method = { RequestMethod.GET })
 	public String initiateConverasation() {
@@ -31,22 +30,16 @@ public class MmtsTrainController {
 
 	@RequestMapping(value = { "/conversation/{conversationId}/chat" }, method = { RequestMethod.PUT })
 	public Chat converse(@PathVariable("conversationId") String conversationId, @RequestBody Chat chat) {
-		JsonNode dialogflowResponse = dialogflowServices.getConverationEngineResponse(conversationId,
-				chat.getMessage());
+		JsonNode dialogflowResponse = dialogflowService.getConverationEngineResponse(conversationId, chat);
 		System.out.println(dialogflowResponse);
-		if (dialogflowResponse.get("result").has("speech")
-				&& !dialogflowResponse.get("result").get("speech").asText().equalsIgnoreCase("")) {
-			return new Chat(dialogflowResponse.get("result").get("speech").asText(), false);
-		} else if (dialogflowResponse.get("result").get("metadata").get("intentName").asText()
-				.equalsIgnoreCase("findTrain")) {
-			String from = dialogflowResponse.get("result").get("parameters").get("from").asText();
-			String to = dialogflowResponse.get("result").get("parameters").get("to").asText();
-			String time = dialogflowResponse.get("result").get("parameters").get("time").asText();
-			Train[] trains = trainScheduleService.getSchedule(from, to, time);
-			return new Chat(Util.formatScheduleInEnglish(trains), true);
-		} else {
-			return new Chat(TROUBLE_UNDERSTANDING, true);
-		}
+		return dialogflowResponseHandlerService.handle(dialogflowResponse);
+	}
+
+	@RequestMapping(value = { "/conversation/{conversationId}/event" }, method = { RequestMethod.PUT })
+	public Chat converse(@PathVariable("conversationId") String conversationId, @RequestBody Event event) {
+		JsonNode dialogflowResponse = dialogflowService.getConverationEngineResponse(conversationId, event);
+		System.out.println(dialogflowResponse);
+		return dialogflowResponseHandlerService.handle(dialogflowResponse);
 	}
 
 }
