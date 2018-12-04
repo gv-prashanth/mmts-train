@@ -3,15 +3,17 @@ package com.vadrin.mmtstrain.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class StationNameToIDService {
 
-	private static final Map<String, String> namIDMap = new HashMap<String, String>();
+	private Map<String, String> namIDMap = new HashMap<String, String>();
 
-	public StationNameToIDService() {
-		super();
+	@PostConstruct
+	public void loadStationNameAndID() {
 		namIDMap.put("aler", "167");
 		namIDMap.put("alwal", "123");
 		namIDMap.put("ammuguda", "124");
@@ -72,8 +74,8 @@ public class StationNameToIDService {
 		namIDMap.put("warangal", "181");
 		namIDMap.put("yakutpura", "165");
 	}
-	
-	public String getID(String stationName){
+
+	public String getID(String stationName) {
 		return namIDMap.get(stationName.toLowerCase());
 	}
 }

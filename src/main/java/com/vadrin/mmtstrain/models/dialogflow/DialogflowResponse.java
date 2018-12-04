@@ -1,6 +1,6 @@
-package com.vadrin.mmtstrain.models.googlehome;
+package com.vadrin.mmtstrain.models.dialogflow;
 
-public class GoogleResponse {
+public class DialogflowResponse {
 
 	private String speech;
 	private String displayText;

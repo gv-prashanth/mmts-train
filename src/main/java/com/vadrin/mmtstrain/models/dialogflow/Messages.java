@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.models.googlehome;
+package com.vadrin.mmtstrain.models.dialogflow;
 
 public class Messages {
 

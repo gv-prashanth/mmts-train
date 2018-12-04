@@ -3,38 +3,51 @@ package com.vadrin.mmtstrain.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.models.Chat;
-import com.vadrin.mmtstrain.models.googlehome.GoogleResponse;
-import com.vadrin.mmtstrain.models.googlehome.Messages;
+import com.vadrin.mmtstrain.models.Event;
+import com.vadrin.mmtstrain.models.dialogflow.DialogflowResponse;
+import com.vadrin.mmtstrain.models.dialogflow.Messages;
 import com.vadrin.mmtstrain.utils.Util;
 
 @Component
 public class DialogflowService {
 
-	public GoogleResponse constructGoogleResponse(String response, boolean endSession) {
-		GoogleResponse googleResponse = new GoogleResponse();
+	@Autowired
+	EventsHandlerService eventsHandlerService;
+	
+	public DialogflowResponse respond(JsonNode dialogflowRequestBody) {
+		Map<String, String> params = Util.getMapFromJson(dialogflowRequestBody.get("result").get("parameters"));
+		Event input = new Event(dialogflowRequestBody.get("result").get("metadata").get("intentName").asText(), params);
+		Chat output = eventsHandlerService.handle(dialogflowRequestBody.get("sessionId").asText(), input);
+		return constructGoogleResponse(output);
+	}
+
+	private DialogflowResponse constructGoogleResponse(String response, boolean endSession) {
+		DialogflowResponse dialogflowResponse = new DialogflowResponse();
 		Messages messages = new Messages();
 		messages.setType(1);
 		messages.setTitle("MMTS Train");
 		messages.setSubtitle("MMTS Train");
 		messages.setImageUrl("https://mmts-train-timings.herokuapp.com/images/icon.png");
 		// googleResponse.setMessages(messages);
-		googleResponse.setDisplayText(response);
-		googleResponse.setSpeech(response);
+		dialogflowResponse.setDisplayText(response);
+		dialogflowResponse.setSpeech(response);
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("google", getGoogleData(response, endSession));
 		// googleResponse.setData(data);
-		googleResponse.setSource("mmts-train-timings.herokuapp.com");
-		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
-		return googleResponse;
+		dialogflowResponse.setSource("mmts-train-timings.herokuapp.com");
+		System.out.println("respose is - " + Util.getJson(dialogflowResponse).toString());
+		return dialogflowResponse;
 	}
 
-	public GoogleResponse constructGoogleResponse(Chat chat) {
+	private DialogflowResponse constructGoogleResponse(Chat chat) {
 		return constructGoogleResponse(chat.getMessage(), chat.isTheEnd());
 	}
 

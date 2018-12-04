@@ -1,21 +1,14 @@
-package com.vadrin.mmtstrain.controllers;
-
-import java.util.UUID;
+package com.vadrin.mmtstrain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.Event;
 import com.vadrin.mmtstrain.models.Train;
-import com.vadrin.mmtstrain.services.TrainScheduleService;
 
-@RestController
-public class MmtsTrainController {
+@Service
+public class EventsHandlerService {
 
 	@Autowired
 	TrainScheduleService trainScheduleService;
@@ -24,15 +17,11 @@ public class MmtsTrainController {
 	private static final String GREET = "Hello! I can help you find a MMTS train.";
 	private static final String BYE = "Bye Bye! Happy Journey!";
 
-	@RequestMapping(value = { "/conversation/id" }, method = { RequestMethod.GET })
-	public String createConversationId() {
-		return UUID.randomUUID().toString();
-	}
-
-	@RequestMapping(value = { "/conversation/{conversationId}/event" }, method = { RequestMethod.PUT })
-	public Chat converse(@PathVariable("conversationId") String conversationId, @RequestBody Event event) {
+	public Chat handle(String conversationId, Event event) {
 		switch (event.getName()) {
 		case "LaunchRequest":
+			return new Chat(GREET, false);
+		case "Welcome":
 			return new Chat(GREET, false);
 		case "AMAZON.HelpIntent":
 			return new Chat(GREET, false);
