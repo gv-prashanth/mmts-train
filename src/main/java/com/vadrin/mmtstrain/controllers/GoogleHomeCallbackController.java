@@ -1,5 +1,7 @@
 package com.vadrin.mmtstrain.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.Event;
 import com.vadrin.mmtstrain.models.googlehome.GoogleResponse;
 import com.vadrin.mmtstrain.services.DialogflowService;
+import com.vadrin.mmtstrain.utils.Util;
 
 @RestController
 public class GoogleHomeCallbackController {
@@ -24,9 +27,8 @@ public class GoogleHomeCallbackController {
 	@RequestMapping(value = { "/callback/google" }, method = { RequestMethod.POST })
 	public GoogleResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
-		String userInput = requestBody.get("result").get("parameters").get("userInput").asText().equalsIgnoreCase("")
-				? "Hi" : requestBody.get("result").get("parameters").get("userInput").asText();
-		Event input = new Event(userInput);
+		Map<String, String> params = Util.getMapFromJson(requestBody.get("result").get("parameters"));
+		Event input = new Event(requestBody.get("result").get("metadata").get("intentName").asText(), params);
 		Chat output = mmtsTrainController.converse(requestBody.get("sessionId").asText(), input);
 		return dialogflowService.constructGoogleResponse(output);
 	}
