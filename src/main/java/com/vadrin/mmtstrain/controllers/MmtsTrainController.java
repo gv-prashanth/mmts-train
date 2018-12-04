@@ -22,6 +22,7 @@ public class MmtsTrainController {
 
 	private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";
 	private static final String GREET = "Hello! I can help you find a MMTS train.";
+	private static final String BYE = "Bye Bye! Happy Journey!";
 
 	@RequestMapping(value = { "/conversation/id" }, method = { RequestMethod.GET })
 	public String createConversationId() {
@@ -36,6 +37,12 @@ public class MmtsTrainController {
 		case "findTrain":
 			return new Chat(formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
 					event.getInfo().get("to"), event.getInfo().get("time"))), true);
+		case "AMAZON.CancelIntent":
+			return new Chat(BYE, true);
+		case "AMAZON.StopIntent":
+			return new Chat(BYE, true);
+		case "AMAZON.HelpIntent":
+			return new Chat(GREET, true);
 		case "SessionEndedRequest":
 			return null;
 		default:
