@@ -2,6 +2,9 @@ package com.vadrin.mmtstrain.models.alexa;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AlexaCardAndSpeech {
 
 	Map<String, Object> outputSpeech;
