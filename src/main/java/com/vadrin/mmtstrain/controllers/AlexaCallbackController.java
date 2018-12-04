@@ -27,6 +27,10 @@ public class AlexaCallbackController {
 	@RequestMapping(value = { "/callback/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
+		if (requestBody.get("request").has("dialogState")
+				&& !requestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
+			return alexaService.autoFetchSlots();
+		}
 		if (requestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Map<String, String> eventParams = new HashMap<String, String>();
 			// requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText();

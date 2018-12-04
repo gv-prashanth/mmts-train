@@ -28,7 +28,16 @@ public class AlexaService {
 		image.put("largeImageUrl", "https://mmts-train-timings.herokuapp.com/images/icon.png");
 		card.put("image", image);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-				new AlexaCardAndSpeech(speech, card, endSession));
+				new AlexaCardAndSpeech(speech, card, endSession, null));
+		System.out.println("respose is - " + Util.getJson(toReturn).toString());
+		return toReturn;
+	}
+	
+	public AlexaResponse autoFetchSlots() {
+		Map<String, Object> autofetch = new HashMap<String, Object>();
+		autofetch.put("type", "Dialog.Delegate");
+		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
+				new AlexaCardAndSpeech(null, null, false, autofetch));
 		System.out.println("respose is - " + Util.getJson(toReturn).toString());
 		return toReturn;
 	}
