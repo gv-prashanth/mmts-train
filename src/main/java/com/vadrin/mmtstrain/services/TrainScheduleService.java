@@ -41,6 +41,7 @@ public class TrainScheduleService {
 	}
 	
 	private String increaseHours(String input, int hours) throws ParseException{
+		input = input.contains(":") ? input : input+":00";
 		DateFormat formatterIn = new SimpleDateFormat("HH:mm");
 		Date inputTime = formatterIn.parse(input);
 		Calendar cal = Calendar.getInstance();

@@ -36,6 +36,8 @@ public class MmtsTrainController {
 		case "findTrain":
 			return new Chat(formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
 					event.getInfo().get("to"), event.getInfo().get("time"))), true);
+		case "SessionEndedRequest":
+			return null;
 		default:
 			return new Chat(TROUBLE_UNDERSTANDING, true);
 		}
