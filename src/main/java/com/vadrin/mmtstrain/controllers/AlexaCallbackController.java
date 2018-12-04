@@ -29,7 +29,9 @@ public class AlexaCallbackController {
 		System.out.println("request is - " + requestBody.toString());
 		if (requestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Map<String, String> eventParams = new HashMap<String, String>();
-			//requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText();
+			// requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText();
+			requestBody.get("request").get("intent").get("slots").elements().forEachRemaining(
+					child -> eventParams.put(child.get("name").asText(), child.get("value").asText()));
 			Event input = new Event(requestBody.get("request").get("intent").get("name").asText(), eventParams);
 			Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
 			return alexaService.constructAlexaResponse(output);
