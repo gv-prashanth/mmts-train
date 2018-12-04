@@ -24,7 +24,7 @@ public class EventsHandlerService {
 			switch (event.getName()) {
 			case "LaunchRequest":
 				return new Chat(GREET, false);
-			case "Welcome":
+			case "Default Welcome Intent":
 				return new Chat(GREET, false);
 			case "AMAZON.HelpIntent":
 				return new Chat(GREET, false);
