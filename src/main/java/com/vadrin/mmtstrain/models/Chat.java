@@ -26,12 +26,6 @@ public class Chat {
 		this.theEnd = theEnd;
 	}
 
-	public Chat(String message) {
-		super();
-		this.message = message;
-		this.theEnd = false;
-	}
-
 	public Chat() {
 		super();
 		// TODO Auto-generated constructor stub

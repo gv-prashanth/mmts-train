@@ -33,7 +33,9 @@ public class MmtsTrainController {
 	public Chat converse(@PathVariable("conversationId") String conversationId, @RequestBody Event event) {
 		switch (event.getName()) {
 		case "LaunchRequest":
-			return new Chat(GREET);
+			return new Chat(GREET, false);
+		case "AMAZON.HelpIntent":
+			return new Chat(GREET, false);
 		case "findTrain":
 			return new Chat(formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
 					event.getInfo().get("to"), event.getInfo().get("time"))), true);
@@ -41,10 +43,8 @@ public class MmtsTrainController {
 			return new Chat(BYE, true);
 		case "AMAZON.StopIntent":
 			return new Chat(BYE, true);
-		case "AMAZON.HelpIntent":
-			return new Chat(GREET, true);
 		case "SessionEndedRequest":
-			return null;
+			return new Chat(BYE, true);
 		default:
 			return new Chat(TROUBLE_UNDERSTANDING, true);
 		}
