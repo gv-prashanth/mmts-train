@@ -1,47 +1,57 @@
 package com.vadrin.mmtstrain.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.models.Chat;
-import com.vadrin.mmtstrain.models.Event;
+import com.vadrin.mmtstrain.models.googlehome.GoogleResponse;
+import com.vadrin.mmtstrain.models.googlehome.Messages;
+import com.vadrin.mmtstrain.utils.Util;
 
-@Service
+@Component
 public class DialogflowService {
 
-	@Autowired
-	RestTemplateBuilder restTemplateBuilder;
-
-	private static final String baseURL = "https://api.dialogflow.com/v1/query";
-	private RestTemplate restTemplate;
-
-	public JsonNode getConverationEngineResponse(String converastionId, Chat chat) {
-		restTemplate = restTemplateBuilder.build();
-		String constructedURL = baseURL + "?query=" + chat.getMessage() + "&lang=en&sessionId=" + converastionId;
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.AUTHORIZATION, "Bearer 942ba94e390a450fb190f2128ffdfa48");
-		HttpEntity<String> request = new HttpEntity<String>(headers);
-		ResponseEntity<JsonNode> responseEntity = this.restTemplate.exchange(constructedURL, HttpMethod.GET, request,
-				JsonNode.class);
-		return responseEntity.getBody();
+	public GoogleResponse constructGoogleResponse(String response, boolean endSession) {
+		GoogleResponse googleResponse = new GoogleResponse();
+		Messages messages = new Messages();
+		messages.setType(1);
+		messages.setTitle("MMTS Train");
+		messages.setSubtitle("MMTS Train");
+		messages.setImageUrl("https://mmts-train-timings.herokuapp.com/images/icon.png");
+		// googleResponse.setMessages(messages);
+		googleResponse.setDisplayText(response);
+		googleResponse.setSpeech(response);
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("google", getGoogleData(response, endSession));
+		// googleResponse.setData(data);
+		googleResponse.setSource("mmts-train-timings.herokuapp.com");
+		System.out.println("respose is - " + Util.getJson(googleResponse).toString());
+		return googleResponse;
 	}
-	
-	public JsonNode getConverationEngineResponse(String converastionId, Event event) {
-		restTemplate = restTemplateBuilder.build();
-		String constructedURL = baseURL + "?e=" + event.getName() + "&lang=en&sessionId=" + converastionId;
-		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.AUTHORIZATION, "Bearer 942ba94e390a450fb190f2128ffdfa48");
-		HttpEntity<String> request = new HttpEntity<String>(headers);
-		ResponseEntity<JsonNode> responseEntity = this.restTemplate.exchange(constructedURL, HttpMethod.GET, request,
-				JsonNode.class);
-		return responseEntity.getBody();
+
+	public GoogleResponse constructGoogleResponse(Chat chat) {
+		return constructGoogleResponse(chat.getMessage(), chat.isTheEnd());
+	}
+
+	private Object getGoogleData(String response, boolean endSession) {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode toReturn = mapper.createObjectNode();
+		toReturn.put("expectUserResponse", !endSession);
+		ObjectNode richResponse = mapper.createObjectNode();
+		ArrayNode items = mapper.createArrayNode();
+		ObjectNode item = mapper.createObjectNode();
+		ObjectNode simpleResponse = mapper.createObjectNode();
+		simpleResponse.put("textToSpeech", response);
+		item.put("simpleResponse", simpleResponse);
+		items.add(item);
+		richResponse.put("items", items);
+		toReturn.put("richResponse", richResponse);
+		return Util.getMapFromJson(toReturn);
 	}
 
 }

@@ -1,6 +1,10 @@
 package com.vadrin.mmtstrain.services;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -8,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.vadrin.mmtstrain.models.Train;
-import com.vadrin.mmtstrain.utils.Util;
 
 @Service
 public class TrainScheduleService {
@@ -31,10 +34,20 @@ public class TrainScheduleService {
 		String fromId = stationNameToIDService.getID(from);
 		String toId = stationNameToIDService.getID(to);
 		try {
-			return getSchedule(fromId, toId, Util.increaseHours(time, -1), Util.increaseHours(time, 1));
+			return getSchedule(fromId, toId, increaseHours(time, -1), increaseHours(time, 1));
 		} catch (ParseException e) {
 			return getSchedule(fromId, toId, "01:00", "23:00");
 		}
+	}
+	
+	private String increaseHours(String input, int hours) throws ParseException{
+		DateFormat formatterIn = new SimpleDateFormat("HH:mm");
+		Date inputTime = formatterIn.parse(input);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(inputTime);
+		cal.add(Calendar.HOUR, hours);
+		DateFormat formatterOut = new SimpleDateFormat("HHmm");
+		return formatterOut.format(cal.getTime());
 	}
 
 }

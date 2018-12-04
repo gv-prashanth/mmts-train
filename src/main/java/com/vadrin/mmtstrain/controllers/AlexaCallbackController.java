@@ -1,5 +1,8 @@
 package com.vadrin.mmtstrain.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,16 +27,11 @@ public class AlexaCallbackController {
 	@RequestMapping(value = { "/callback/alexa" }, method = { RequestMethod.POST })
 	public AlexaResponse getChat(@RequestBody JsonNode requestBody) {
 		System.out.println("request is - " + requestBody.toString());
-		if (requestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
-			Chat input = new Chat(
-					requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText());
-			Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
-			return alexaService.constructAlexaResponse(output);
-		} else {
-			Event input = new Event(requestBody.get("request").get("type").asText());
-			Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
-			return alexaService.constructAlexaResponse(output);
-		}
+		Map<String, String> eventParams = new HashMap<String, String>();
+		//requestBody.get("request").get("intent").get("slots").get("userInput").get("value").asText();
+		Event input = new Event(requestBody.get("request").get("intent").get("name").asText(), eventParams);
+		Chat output = mmtsTrainController.converse(requestBody.get("session").get("sessionId").asText(), input);
+		return alexaService.constructAlexaResponse(output);
 	}
 
 }
