@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "mmts train",
+            "invocationName": "m. m. t. s. train",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
@@ -16,51 +16,592 @@
                     "samples": []
                 },
                 {
-                    "name": "forwardUserInput",
+                    "name": "findTrain",
                     "slots": [
                         {
-                            "name": "userInput",
-                            "type": "userInput"
+                            "name": "from",
+                            "type": "Station",
+                            "samples": [
+                                "{from}"
+                            ]
+                        },
+                        {
+                            "name": "to",
+                            "type": "Station",
+                            "samples": [
+                                "{to}"
+                            ]
+                        },
+                        {
+                            "name": "time",
+                            "type": "AMAZON.TIME",
+                            "samples": [
+                                "{time}"
+                            ]
                         }
                     ],
                     "samples": [
-                        "I {userInput}",
-                        "{userInput}"
+                        "from {from} to {to} around {time}",
+                        "from {from} to {to} at {time}",
+                        "im looking for M.M.T.S",
+                        "find me a train",
+                        "find me a M.M.T.S"
                     ]
                 }
             ],
             "types": [
                 {
-                    "name": "userInput",
+                    "name": "Station",
                     "values": [
                         {
                             "name": {
-                                "value": "just a placeholder for text"
+                                "value": "aler",
+                                "synonyms": [
+                                    "aler"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "anything"
+                                "value": "alwal",
+                                "synonyms": [
+                                    "alwal"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "what is this?"
+                                "value": "ammuguda",
+                                "synonyms": [
+                                    "ammuguda"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "I am awesome"
+                                "value": "arts college",
+                                "synonyms": [
+                                    "art college",
+                                    "art's college",
+                                    "arts college"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "I want water"
+                                "value": "begumpet",
+                                "synonyms": [
+                                    "begumpet"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bharatnagar",
+                                "synonyms": [
+                                    "bharatnagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bhongir",
+                                "synonyms": [
+                                    "bhongir"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bibinagar jn",
+                                "synonyms": [
+                                    "bibinagar jn"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bolarum",
+                                "synonyms": [
+                                    "bolarum"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bolarum bazar",
+                                "synonyms": [
+                                    "bolarum bazar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "borabanda",
+                                "synonyms": [
+                                    "borabanda"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "budvel",
+                                "synonyms": [
+                                    "budvel"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cavalry barracks",
+                                "synonyms": [
+                                    "cavalry barracks"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "chandanagar",
+                                "synonyms": [
+                                    "chandanagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "charlapalli",
+                                "synonyms": [
+                                    "charlapalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dabilpur",
+                                "synonyms": [
+                                    "dabilpur"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dabirpura",
+                                "synonyms": [
+                                    "dabirpura"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dayanandnagar",
+                                "synonyms": [
+                                    "dayanandnagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "falaknuma",
+                                "synonyms": [
+                                    "falaknuma"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "fatehnagar",
+                                "synonyms": [
+                                    "fatehnagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ghanapur",
+                                "synonyms": [
+                                    "ghanapur"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ghatkesar",
+                                "synonyms": [
+                                    "ghatkesar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gowdavalli",
+                                "synonyms": [
+                                    "gowdavalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "gundla pochampalli",
+                                "synonyms": [
+                                    "gundla pochampalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hafeezpet",
+                                "synonyms": [
+                                    "hafeezpet"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hitech city",
+                                "synonyms": [
+                                    "hi tech city",
+                                    "high-tech city",
+                                    "hitech city"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "huppuguda",
+                                "synonyms": [
+                                    "huppuguda"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "hyderabad",
+                                "synonyms": [
+                                    "hyderabad"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "jamai osmania",
+                                "synonyms": [
+                                    "jamai osmania"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "james street",
+                                "synonyms": [
+                                    "james street"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "jangaon",
+                                "synonyms": [
+                                    "jangaon"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kacheguda",
+                                "synonyms": [
+                                    "kacheguda"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kazipet jn",
+                                "synonyms": [
+                                    "kazipet jn"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "khairatabad",
+                                "synonyms": [
+                                    "khairatabad"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "kuchavaram h",
+                                "synonyms": [
+                                    "kuchavaram h"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lakdikapul",
+                                "synonyms": [
+                                    "lakdikapul"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lallaguda gate",
+                                "synonyms": [
+                                    "lallaguda gate"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lingampalli",
+                                "synonyms": [
+                                    "lingampalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "malakpet",
+                                "synonyms": [
+                                    "malakpet"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "malkajgiri",
+                                "synonyms": [
+                                    "malkajgiri"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "manoharabad",
+                                "synonyms": [
+                                    "manoharabad"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "medchal",
+                                "synonyms": [
+                                    "medchal"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "nature cure hospital",
+                                "synonyms": [
+                                    "nature cure hospital"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "necklace road",
+                                "synonyms": [
+                                    "necklace road"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "npa shivrampalli",
+                                "synonyms": [
+                                    "npa shivrampalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pembarthi",
+                                "synonyms": [
+                                    "pembarthi"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pindial",
+                                "synonyms": [
+                                    "pindial"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "raghunathapalli",
+                                "synonyms": [
+                                    "raghunathapalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "raigir",
+                                "synonyms": [
+                                    "raigir"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ramakistapuram gate",
+                                "synonyms": [
+                                    "ramakistapuram gate"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "safilguda",
+                                "synonyms": [
+                                    "safilguda"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sanjeevaiah park",
+                                "synonyms": [
+                                    "sanjeevaiah park"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "secunderabad",
+                                "synonyms": [
+                                    "secunderabad"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "sitafalmandi",
+                                "synonyms": [
+                                    "sethafal mandi",
+                                    "seethaphal mandi",
+                                    " Sitafal mandi",
+                                    "sitafalmandi"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "umdanagar",
+                                "synonyms": [
+                                    "umdanagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "vidyanagar",
+                                "synonyms": [
+                                    "vidyanagar"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "wangapalli",
+                                "synonyms": [
+                                    "wangapalli"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "warangal",
+                                "synonyms": [
+                                    "warangal"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "yakutpura",
+                                "synonyms": [
+                                    "yakutpura"
+                                ]
                             }
                         }
                     ]
                 }
             ]
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "findTrain",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "from",
+                            "type": "Station",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1173418625520.1340887921655"
+                            }
+                        },
+                        {
+                            "name": "to",
+                            "type": "Station",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1173418625520.148120231408"
+                            }
+                        },
+                        {
+                            "name": "time",
+                            "type": "AMAZON.TIME",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1173418625520.376364036102"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1173418625520.1340887921655",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What is your source station?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1173418625520.148120231408",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What is your destination station?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1173418625520.376364036102",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Around what time are you planning to travel?"
+                    }
+                ]
+            }
+        ]
     }
 }
