@@ -11,6 +11,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.vadrin.mmtstrain.exceptions.InvalidStationNamesException;
 import com.vadrin.mmtstrain.models.Train;
 
 @Service
@@ -30,9 +31,12 @@ public class TrainScheduleService {
 		return restTemplate.getForObject(url, Train[].class);
 	}
 
-	public Train[] getSchedule(String from, String to, String time) {
+	public Train[] getSchedule(String from, String to, String time) throws InvalidStationNamesException {
 		String fromId = stationNameToIDService.getID(from);
 		String toId = stationNameToIDService.getID(to);
+		if(fromId==null || toId==null){
+			throw new InvalidStationNamesException();
+		}
 		try {
 			return getSchedule(fromId, toId, increaseHours(time, -1), increaseHours(time, 1));
 		} catch (ParseException e) {
