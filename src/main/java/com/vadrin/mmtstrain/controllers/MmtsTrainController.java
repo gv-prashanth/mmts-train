@@ -21,6 +21,7 @@ public class MmtsTrainController {
 	TrainScheduleService trainScheduleService;
 
 	private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";
+	private static final String GREET = "Hello! I can help you find a MMTS train.";
 
 	@RequestMapping(value = { "/conversation/id" }, method = { RequestMethod.GET })
 	public String createConversationId() {
@@ -30,6 +31,8 @@ public class MmtsTrainController {
 	@RequestMapping(value = { "/conversation/{conversationId}/event" }, method = { RequestMethod.PUT })
 	public Chat converse(@PathVariable("conversationId") String conversationId, @RequestBody Event event) {
 		switch (event.getName()) {
+		case "LaunchRequest":
+			return new Chat(GREET);
 		case "findTrain":
 			return new Chat(formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
 					event.getInfo().get("to"), event.getInfo().get("time"))), true);
