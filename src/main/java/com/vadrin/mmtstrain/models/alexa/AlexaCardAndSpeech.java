@@ -1,5 +1,6 @@
 package com.vadrin.mmtstrain.models.alexa;
 
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -9,7 +10,7 @@ public class AlexaCardAndSpeech {
 
 	Map<String, Object> outputSpeech;
 	Map<String, Object> card;
-	Map<String, Object> directives;
+	List<Map<String, Object>> directives;
 	boolean shouldEndSession;
 
 	public Map<String, Object> getOutputSpeech() {
@@ -41,15 +42,16 @@ public class AlexaCardAndSpeech {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Map<String, Object> getDirectives() {
+	public List<Map<String, Object>> getDirectives() {
 		return directives;
 	}
 
-	public void setDirectives(Map<String, Object> directives) {
+	public void setDirectives(List<Map<String, Object>> directives) {
 		this.directives = directives;
 	}
 
-	public AlexaCardAndSpeech(Map<String, Object> outputSpeech, Map<String, Object> card, boolean shouldEndSession, Map<String, Object> directives) {
+	public AlexaCardAndSpeech(Map<String, Object> outputSpeech, Map<String, Object> card, boolean shouldEndSession,
+			List<Map<String, Object>> directives) {
 		super();
 		this.outputSpeech = outputSpeech;
 		this.card = card;

@@ -1,6 +1,8 @@
 package com.vadrin.mmtstrain.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -34,10 +36,12 @@ public class AlexaService {
 	}
 	
 	public AlexaResponse autoFetchSlots() {
+		List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
 		Map<String, Object> autofetch = new HashMap<String, Object>();
 		autofetch.put("type", "Dialog.Delegate");
+		directives.add(autofetch);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-				new AlexaCardAndSpeech(null, null, false, autofetch));
+				new AlexaCardAndSpeech(null, null, false, directives));
 		System.out.println("respose is - " + Util.getJson(toReturn).toString());
 		return toReturn;
 	}
