@@ -78,6 +78,10 @@ public class AlexaService {
 				((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
 				cleared = true;
 			}
+		}catch(NullPointerException e) {
+			
+		}
+		try {
 			if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
 					.get("code").asText().endsWith("NO_MATCH")) {
 				((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
