@@ -29,7 +29,7 @@ public class AlexaService {
 		if (alexaRequestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Map<String, String> eventParams = new HashMap<String, String>();
 			alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(
-					child -> eventParams.put(child.get("name").asText(), child.get("value").asText()));
+					child -> eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority").get(0).get("values").get(0).get("value").get("name").asText()));
 			Event input = new Event(alexaRequestBody.get("request").get("intent").get("name").asText(), eventParams);
 			Chat output = eventsHandlerService.handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
 			return constructAlexaResponse(output);
