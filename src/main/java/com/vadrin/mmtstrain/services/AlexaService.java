@@ -73,12 +73,16 @@ public class AlexaService {
 		try {
 			if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
 					.get("code").asText().endsWith("NO_MATCH")) {
-				((ObjectNode) toClearSlots.get("slots")).remove("from");
+				((ObjectNode) toClearSlots.get("slots").get("from")).remove("value");
+				((ObjectNode) toClearSlots.get("slots").get("from")).remove("resolutions");
+				((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
 				cleared = true;
 			}
 			if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
 					.get("code").asText().endsWith("NO_MATCH")) {
-				((ObjectNode) toClearSlots.get("slots")).remove("to");
+				((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
+				((ObjectNode) toClearSlots.get("slots").get("to")).remove("resolutions");
+				((ObjectNode) toClearSlots.get("slots").get("to")).remove("source");
 				cleared = true;
 			}
 		}catch(NullPointerException e) {
