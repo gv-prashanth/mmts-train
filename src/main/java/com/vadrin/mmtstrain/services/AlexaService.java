@@ -70,15 +70,19 @@ public class AlexaService {
 	private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
 		JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
 		boolean cleared = false;
-		if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-				.get("code").asText().endsWith("NO_MATCH")) {
-			((ObjectNode) toClearSlots.get("slots")).remove("from");
-			cleared = true;
-		}
-		if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-				.get("code").asText().endsWith("NO_MATCH")) {
-			((ObjectNode) toClearSlots.get("slots")).remove("to");
-			cleared = true;
+		try {
+			if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+					.get("code").asText().endsWith("NO_MATCH")) {
+				((ObjectNode) toClearSlots.get("slots")).remove("from");
+				cleared = true;
+			}
+			if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+					.get("code").asText().endsWith("NO_MATCH")) {
+				((ObjectNode) toClearSlots.get("slots")).remove("to");
+				cleared = true;
+			}
+		}catch(NullPointerException e) {
+			
 		}
 		List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
 		Map<String, Object> autofetch = new HashMap<String, Object>();
