@@ -17,19 +17,25 @@ import com.vadrin.mmtstrain.utils.Util;
 
 @Service
 public class AlexaService {
-	
+
 	@Autowired
 	EventsHandlerService eventsHandlerService;
-	
-	public AlexaResponse respond(JsonNode alexaRequestBody){
+
+	public AlexaResponse respond(JsonNode alexaRequestBody) {
 		if (alexaRequestBody.get("request").has("dialogState")
 				&& !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
 			return autoFetchSlots();
 		}
 		if (alexaRequestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Map<String, String> eventParams = new HashMap<String, String>();
-			alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(
-					child -> eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority").get(0).get("values").get(0).get("value").get("name").asText()));
+			alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(child -> {
+				try {
+					eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
+							.get(0).get("values").get(0).get("value").get("name").asText());
+				} catch (NullPointerException e) {
+					eventParams.put(child.get("name").asText(), child.get("value").asText());
+				}
+			});
 			Event input = new Event(alexaRequestBody.get("request").get("intent").get("name").asText(), eventParams);
 			Chat output = eventsHandlerService.handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
 			return constructAlexaResponse(output);
@@ -39,7 +45,7 @@ public class AlexaService {
 			return constructAlexaResponse(output);
 		}
 	}
-	
+
 	private AlexaResponse constructAlexaResponse(String response, boolean endSession) {
 		Map<String, Object> speech = new HashMap<String, Object>();
 		speech.put("type", "PlainText");
@@ -59,7 +65,7 @@ public class AlexaService {
 		System.out.println("respose is - " + Util.getJson(toReturn).toString());
 		return toReturn;
 	}
-	
+
 	private AlexaResponse autoFetchSlots() {
 		List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
 		Map<String, Object> autofetch = new HashMap<String, Object>();
