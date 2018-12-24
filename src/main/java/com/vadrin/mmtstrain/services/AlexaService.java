@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.Event;
 import com.vadrin.mmtstrain.models.alexa.AlexaCardAndSpeech;
@@ -24,7 +25,7 @@ public class AlexaService {
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
 		if (alexaRequestBody.get("request").has("dialogState")
 				&& !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
-			return autoFetchSlots();
+			return autoFetchSlots(alexaRequestBody);
 		}
 		if (alexaRequestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
 			Map<String, String> eventParams = new HashMap<String, String>();
@@ -66,10 +67,24 @@ public class AlexaService {
 		return toReturn;
 	}
 
-	private AlexaResponse autoFetchSlots() {
+	private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
+		JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
+		boolean cleared = false;
+		if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+				.get("code").asText().endsWith("NO_MATCH")) {
+			((ObjectNode) toClearSlots.get("slots")).remove("from");
+			cleared = true;
+		}
+		if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+				.get("code").asText().endsWith("NO_MATCH")) {
+			((ObjectNode) toClearSlots.get("slots")).remove("to");
+			cleared = true;
+		}
 		List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
 		Map<String, Object> autofetch = new HashMap<String, Object>();
 		autofetch.put("type", "Dialog.Delegate");
+		if (cleared)
+			autofetch.put("updatedIntent", Util.getMapFromJson(toClearSlots));
 		directives.add(autofetch);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
 				new AlexaCardAndSpeech(null, null, false, directives));
