@@ -3,12 +3,201 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>MMTS Train Timings</title>
+<script>
+function loadDoc() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("resp").innerHTML =
+            this.responseText;
+       }
+    };
+    xhttp.open("GET", '/trains?from='+document.getElementById('from').value+'&to='+document.getElementById('to').value+'&time='+document.getElementById('hours').value+':'+document.getElementById('minutes').value, true);
+    xhttp.send();
+}
+</script>
 </head>
-<body style="background-color:lightgrey;">
+<body style="background-color: lightgrey;">
+	
+	<center><img src="/images/icon.png" width="50px"/><h1>MMTS Train Timings</h1></center>
 	<center>
-		<iframe allow="microphone;" width="480" height="640"
-			src="https://console.dialogflow.com/api-client/demo/embedded/b351da5f-806f-4bee-8809-9fc3f62553b2">
-		</iframe>
+		From: <select id="from" name="from">
+			<option value="aler">aler</option>
+			<option value="alwal">alwal</option>
+			<option value="ammuguda">ammuguda</option>
+			<option value="arts college">arts college</option>
+			<option value="begumpet">begumpet</option>
+			<option value="bharatnagar">bharatnagar</option>
+			<option value="bhongir">bhongir</option>
+			<option value="bibinagar jn">bibinagar jn</option>
+			<option value="bolarum">bolarum</option>
+			<option value="bolarum bazar">bolarum bazar</option>
+			<option value="borabanda">borabanda</option>
+			<option value="budvel">budvel</option>
+			<option value="cavalry barracks">cavalry barracks</option>
+			<option value="chandanagar">chandanagar</option>
+			<option value="charlapalli">charlapalli</option>
+			<option value="dabilpur">dabilpur</option>
+			<option value="dabirpura">dabirpura</option>
+			<option value="dayanandnagar">dayanandnagar</option>
+			<option value="falaknuma">falaknuma</option>
+			<option value="fatehnagar">fatehnagar</option>
+			<option value="ghanapur">ghanapur</option>
+			<option value="ghatkesar">ghatkesar</option>
+			<option value="gowdavalli">gowdavalli</option>
+			<option value="gundla pochampalli">gundla pochampalli</option>
+			<option value="hafeezpet">hafeezpet</option>
+			<option value="hitech city">hitech city</option>
+			<option value="huppuguda">huppuguda</option>
+			<option value="hyderabad">hyderabad</option>
+			<option value="jamai osmania">jamai osmania</option>
+			<option value="james street">james street</option>
+			<option value="jangaon">jangaon</option>
+			<option value="kacheguda">kacheguda</option>
+			<option value="kazipet jn">kazipet jn</option>
+			<option value="khairatabad">khairatabad</option>
+			<option value="kuchavaram h">kuchavaram h</option>
+			<option value="lakdikapul">lakdikapul</option>
+			<option value="lallaguda gate">lallaguda gate</option>
+			<option value="lingampalli">lingampalli</option>
+			<option value="malakpet">malakpet</option>
+			<option value="malkajgiri">malkajgiri</option>
+			<option value="manoharabad">manoharabad</option>
+			<option value="medchal">medchal</option>
+			<option value="nature cure hospital">nature cure hospital</option>
+			<option value="necklace road">necklace road</option>
+			<option value="npa shivrampalli">npa shivrampalli</option>
+			<option value="pembarthi">pembarthi</option>
+			<option value="pindial">pindial</option>
+			<option value="raghunathapalli">raghunathapalli</option>
+			<option value="raigir">raigir</option>
+			<option value="ramakistapuram gate">ramakistapuram gate</option>
+			<option value="safilguda">safilguda</option>
+			<option value="sanjeevaiah park">sanjeevaiah park</option>
+			<option value="secunderabad">secunderabad</option>
+			<option value="sitafalmandi">sitafalmandi</option>
+			<option value="umdanagar">umdanagar</option>
+			<option value="vidyanagar">vidyanagar</option>
+			<option value="wangapalli">wangapalli</option>
+			<option value="warangal">warangal</option>
+			<option value="yakutpura">yakutpura</option>
+		</select> To: <select id="to"
+			name="to">
+			<option value="aler">aler</option>
+			<option value="alwal">alwal</option>
+			<option value="ammuguda">ammuguda</option>
+			<option value="arts college">arts college</option>
+			<option value="begumpet">begumpet</option>
+			<option value="bharatnagar">bharatnagar</option>
+			<option value="bhongir">bhongir</option>
+			<option value="bibinagar jn">bibinagar jn</option>
+			<option value="bolarum">bolarum</option>
+			<option value="bolarum bazar">bolarum bazar</option>
+			<option value="borabanda">borabanda</option>
+			<option value="budvel">budvel</option>
+			<option value="cavalry barracks">cavalry barracks</option>
+			<option value="chandanagar">chandanagar</option>
+			<option value="charlapalli">charlapalli</option>
+			<option value="dabilpur">dabilpur</option>
+			<option value="dabirpura">dabirpura</option>
+			<option value="dayanandnagar">dayanandnagar</option>
+			<option value="falaknuma">falaknuma</option>
+			<option value="fatehnagar">fatehnagar</option>
+			<option value="ghanapur">ghanapur</option>
+			<option value="ghatkesar">ghatkesar</option>
+			<option value="gowdavalli">gowdavalli</option>
+			<option value="gundla pochampalli">gundla pochampalli</option>
+			<option value="hafeezpet">hafeezpet</option>
+			<option value="hitech city">hitech city</option>
+			<option value="huppuguda">huppuguda</option>
+			<option value="hyderabad">hyderabad</option>
+			<option value="jamai osmania">jamai osmania</option>
+			<option value="james street">james street</option>
+			<option value="jangaon">jangaon</option>
+			<option value="kacheguda">kacheguda</option>
+			<option value="kazipet jn">kazipet jn</option>
+			<option value="khairatabad">khairatabad</option>
+			<option value="kuchavaram h">kuchavaram h</option>
+			<option value="lakdikapul">lakdikapul</option>
+			<option value="lallaguda gate">lallaguda gate</option>
+			<option value="lingampalli">lingampalli</option>
+			<option value="malakpet">malakpet</option>
+			<option value="malkajgiri">malkajgiri</option>
+			<option value="manoharabad">manoharabad</option>
+			<option value="medchal">medchal</option>
+			<option value="nature cure hospital">nature cure hospital</option>
+			<option value="necklace road">necklace road</option>
+			<option value="npa shivrampalli">npa shivrampalli</option>
+			<option value="pembarthi">pembarthi</option>
+			<option value="pindial">pindial</option>
+			<option value="raghunathapalli">raghunathapalli</option>
+			<option value="raigir">raigir</option>
+			<option value="ramakistapuram gate">ramakistapuram gate</option>
+			<option value="safilguda">safilguda</option>
+			<option value="sanjeevaiah park">sanjeevaiah park</option>
+			<option value="secunderabad">secunderabad</option>
+			<option value="sitafalmandi">sitafalmandi</option>
+			<option value="umdanagar">umdanagar</option>
+			<option value="vidyanagar">vidyanagar</option>
+			<option value="wangapalli">wangapalli</option>
+			<option value="warangal">warangal</option>
+			<option value="yakutpura">yakutpura</option>
+		</select> Hrs: <select id="hours" name="hours">
+			<option value="0">0</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
+			<option value="21">21</option>
+			<option value="22">22</option>
+			<option value="23">23</option>
+		</select> 
+		Mins: <select id="minutes" name="minutes">
+			<option value="0">0</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
+			<option value="21">21</option>
+			<option value="22">22</option>
+			<option value="23">23</option>
+		</select><br><br>
+		<button type="button" onclick="loadDoc()">Find
+			Trains</button>
+			<br><br><br><br><br>
+			<div id="resp"></div>
 	</center>
 </body>
 </html>
