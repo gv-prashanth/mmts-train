@@ -1,5 +1,8 @@
 package com.vadrin.mmtstrain.services;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import com.vadrin.mmtstrain.models.Train;
@@ -9,9 +12,8 @@ public class EventsHandlerService {
 
 	public String formatScheduleInEnglish(Train[] allSchedules) {
 		if (allSchedules.length > 1) {
-			return "Ok. There are " + allSchedules.length + " trains. First mmts from "
-					+ allSchedules[0].getStartstation() + " to " + allSchedules[0].getStopstation() + " is at "
-					+ allSchedules[0].getStarttime() + ". The next one is at " + allSchedules[1].getStarttime() + ".";
+			return "Ok. I found " + allSchedules.length + " mmts from " + allSchedules[0].getStartstation() + " to "
+          + allSchedules[0].getStopstation()+". They are at " + Arrays.stream(allSchedules).map(Train::getStarttime).collect(Collectors.joining(", ")) + ".";
 		} else if (allSchedules.length > 0) {
 			return "Ok. I found a mmts from " + allSchedules[0].getStartstation() + " to "
 					+ allSchedules[0].getStopstation() + " at " + allSchedules[0].getStarttime() + ".";
