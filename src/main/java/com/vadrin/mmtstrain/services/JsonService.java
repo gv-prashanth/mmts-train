@@ -1,22 +1,15 @@
-package com.vadrin.mmtstrain.utils;
+package com.vadrin.mmtstrain.services;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vadrin.mmtstrain.models.Train;
 
-public class Util {
+public class JsonService {
 
 	private static ObjectMapper om = new ObjectMapper();
 

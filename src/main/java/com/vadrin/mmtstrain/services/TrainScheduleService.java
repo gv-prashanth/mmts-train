@@ -11,7 +11,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.vadrin.mmtstrain.exceptions.InvalidStationNamesException;
+import com.vadrin.mmtstrain.models.InvalidStationNamesException;
 import com.vadrin.mmtstrain.models.Train;
 
 @Service
@@ -19,10 +19,11 @@ public class TrainScheduleService {
 
 	@Autowired
 	RestTemplateBuilder restTemplateBuilder;
+	
 	@Autowired
 	StationNameToIDService stationNameToIDService;
 
-	private static final String baseURL = "http://www.mmtstraintimings.in/MMTSTimingService.svc/trainsbetween/";
+	private static final String baseURL = "https://www.mmtstrains.com/MMTSTimingService.svc/trainsbetween/";
 	private RestTemplate restTemplate;
 
 	public Train[] getSchedule(String fromId, String toId, String startTime, String endTime) {

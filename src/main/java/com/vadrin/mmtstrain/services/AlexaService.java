@@ -10,17 +10,24 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.vadrin.mmtstrain.models.AlexaCardAndSpeech;
+import com.vadrin.mmtstrain.models.AlexaResponse;
 import com.vadrin.mmtstrain.models.Chat;
 import com.vadrin.mmtstrain.models.Event;
-import com.vadrin.mmtstrain.models.alexa.AlexaCardAndSpeech;
-import com.vadrin.mmtstrain.models.alexa.AlexaResponse;
-import com.vadrin.mmtstrain.utils.Util;
+import com.vadrin.mmtstrain.models.InvalidStationNamesException;
 
 @Service
 public class AlexaService {
 
 	@Autowired
 	EventsHandlerService eventsHandlerService;
+  @Autowired
+  TrainScheduleService trainScheduleService;
+	
+  private static final String GREET = "Hello! I can help you find a MMTS train. Just ask me for a MMTS from source station to destination station.";
+  private static final String BYE = "Bye Bye! Happy Journey!";
+  private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";
+  private static final String TROUBLE_UNDERSTANDING_STATION = "I am having trouble understanding the stations you have mentioned. Please try again.";
 
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
 		if (alexaRequestBody.get("request").has("dialogState")
@@ -38,11 +45,11 @@ public class AlexaService {
 				}
 			});
 			Event input = new Event(alexaRequestBody.get("request").get("intent").get("name").asText(), eventParams);
-			Chat output = eventsHandlerService.handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
+			Chat output = handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
 			return constructAlexaResponse(output);
 		} else {
 			Event input = new Event(alexaRequestBody.get("request").get("type").asText());
-			Chat output = eventsHandlerService.handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
+			Chat output = handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
 			return constructAlexaResponse(output);
 		}
 	}
@@ -63,7 +70,7 @@ public class AlexaService {
 		card.put("image", image);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
 				new AlexaCardAndSpeech(speech, card, endSession, null));
-		System.out.println("respose is - " + Util.getJson(toReturn).toString());
+		System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
 		return toReturn;
 	}
 
@@ -96,16 +103,43 @@ public class AlexaService {
 		Map<String, Object> autofetch = new HashMap<String, Object>();
 		autofetch.put("type", "Dialog.Delegate");
 		if (cleared)
-			autofetch.put("updatedIntent", Util.getMapFromJson(toClearSlots));
+			autofetch.put("updatedIntent", JsonService.getMapFromJson(toClearSlots));
 		directives.add(autofetch);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
 				new AlexaCardAndSpeech(null, null, false, directives));
-		System.out.println("respose is - " + Util.getJson(toReturn).toString());
+		System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
 		return toReturn;
 	}
 
 	private AlexaResponse constructAlexaResponse(Chat chat) {
 		return constructAlexaResponse(chat.getMessage(), chat.isTheEnd());
 	}
+	
+
+  private Chat handle(String conversationId, Event event) {
+    try{
+      switch (event.getName()) {
+      case "LaunchRequest":
+        return new Chat(GREET, false);
+      case "Default Welcome Intent":
+        return new Chat(GREET, false);
+      case "AMAZON.HelpIntent":
+        return new Chat(GREET, false);
+      case "findTrain":
+        return new Chat(eventsHandlerService.formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
+            event.getInfo().get("to"), event.getInfo().get("time"))), true);
+      case "AMAZON.CancelIntent":
+        return new Chat(BYE, true);
+      case "AMAZON.StopIntent":
+        return new Chat(BYE, true);
+      case "SessionEndedRequest":
+        return new Chat(BYE, true);
+      default:
+        return new Chat(TROUBLE_UNDERSTANDING, true);
+      }
+    }catch(InvalidStationNamesException ex){
+      return new Chat(TROUBLE_UNDERSTANDING_STATION, true);
+    }
+  }
 
 }

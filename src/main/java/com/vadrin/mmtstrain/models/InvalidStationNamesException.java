@@ -1,4 +1,4 @@
-package com.vadrin.mmtstrain.exceptions;
+package com.vadrin.mmtstrain.models;
 
 public class InvalidStationNamesException extends Exception {
 
