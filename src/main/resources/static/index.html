@@ -10,12 +10,35 @@ function loadDoc() {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById("resp").innerHTML =
             this.responseText;
+            
+            try {
+              // Create a new SpeechSynthesisUtterance object
+			  let utterance = new SpeechSynthesisUtterance();
+			
+			  // Set the text and voice of the utterance
+			  utterance.text = this.responseText;
+			  utterance.voice = window.speechSynthesis.getVoices()[0];
+			
+			  // Speak the utterance
+			  window.speechSynthesis.speak(utterance);
+            }
+			catch(err) {
+
+			}
        }
     };
     xhttp.open("GET", '/trains?from='+document.getElementById('from').value+'&to='+document.getElementById('to').value+'&time='+document.getElementById('hours').value+':'+document.getElementById('minutes').value, true);
     xhttp.send();
 }
 </script>
+<style>
+.select {
+height: 30px; width: 250px; font-size: 16px;
+}
+.select2 {
+height: 30px; font-size: 16px;
+}
+</style>
 </head>
 <body style="background-color: lightgrey;">
 
@@ -24,7 +47,7 @@ function loadDoc() {
 		<h1>MMTS Train Timings</h1>
 	</center>
 	<center>
-		From: <select id="from" name="from">
+		<select id="from" name="from" class="select">
 			<option value="aler">aler</option>
 			<option value="alwal">alwal</option>
 			<option value="ammuguda">ammuguda</option>
@@ -84,7 +107,8 @@ function loadDoc() {
 			<option value="wangapalli">wangapalli</option>
 			<option value="warangal">warangal</option>
 			<option value="yakutpura">yakutpura</option>
-		</select> To: <select id="to" name="to">
+		</select>&nbsp;&nbsp;&nbsp; <img src="/images/right-arrow.png" height="16px" width="25px"/>
+		&nbsp;&nbsp;&nbsp;<select id="to" name="to"  class="select">
 			<option value="aler">aler</option>
 			<option value="alwal">alwal</option>
 			<option value="ammuguda">ammuguda</option>
@@ -144,7 +168,8 @@ function loadDoc() {
 			<option value="wangapalli">wangapalli</option>
 			<option value="warangal">warangal</option>
 			<option value="yakutpura">yakutpura</option>
-		</select> Hrs: <select id="hours" name="hours">
+		</select><br>
+		<br> Time: <select id="hours" name="hours"  class="select2">
 			<option value="0">0</option>
 			<option value="1">1</option>
 			<option value="2">2</option>
@@ -169,7 +194,7 @@ function loadDoc() {
 			<option value="21">21</option>
 			<option value="22">22</option>
 			<option value="23">23</option>
-		</select> Mins: <select id="minutes" name="minutes">
+		</select> <select id="minutes" name="minutes"  class="select2">
 			<option value="0">0</option>
 			<option value="1">1</option>
 			<option value="2">2</option>
@@ -230,8 +255,11 @@ function loadDoc() {
 			<option value="57">57</option>
 			<option value="58">58</option>
 			<option value="59">59</option>
-		</select><br> <br><br>
-		<button type="button" onclick="loadDoc()" style="height:30px;width:150px;font-size: 16px;">Find Trains</button>
+		</select><br> <br>
+		<br>
+		<button type="button" onclick="loadDoc()"
+			style="height: 40px; width: 200px; font-size: 16px;">Find
+			Trains</button>
 		<br> <br> <br> <br> <br>
 		<h2 id="resp"></h2>
 	</center>
