@@ -65,8 +65,8 @@ public class AlexaService {
 		card.put("text", response);
 
 		Map<String, Object> image = new HashMap<String, Object>();
-		image.put("smallImageUrl", "https://mmts-train-timings.herokuapp.com/images/icon.png");
-		image.put("largeImageUrl", "https://mmts-train-timings.herokuapp.com/images/icon.png");
+		image.put("smallImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
+		image.put("largeImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
 		card.put("image", image);
 		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
 				new AlexaCardAndSpeech(speech, card, endSession, null));
