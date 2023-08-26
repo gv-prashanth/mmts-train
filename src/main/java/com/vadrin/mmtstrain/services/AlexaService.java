@@ -47,11 +47,18 @@ public class AlexaService {
 			Event input = new Event(alexaRequestBody.get("request").get("intent").get("name").asText(), eventParams);
 			Chat output = handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
 			return constructAlexaResponse(output);
-		} else {
-			Event input = new Event(alexaRequestBody.get("request").get("type").asText());
-			Chat output = handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
-			return constructAlexaResponse(output);
-		}
+    } else {
+      Event input = new Event(alexaRequestBody.get("request").get("type").asText());
+      Chat output = handle(alexaRequestBody.get("session").get("sessionId").asText(), input);
+      AlexaResponse toReturn = constructAlexaResponse(output);
+      List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
+      Map<String, Object> updateIntent = new HashMap<String, Object>();
+      updateIntent.put("type", "Dialog.Delegate");
+      updateIntent.put("updatedIntent", "findTrain");
+      directives.add(updateIntent);
+      toReturn.getResponse().setDirectives(directives);
+      return toReturn;
+    }
 	}
 
 	private AlexaResponse constructAlexaResponse(String response, boolean endSession) {
