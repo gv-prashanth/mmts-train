@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.vadrin.mmtstrain.models.AlexaResponse;
+import com.vadrin.mmtstrain.models.alexa.AlexaResponse;
 import com.vadrin.mmtstrain.services.AlexaService;
 
 @RestController

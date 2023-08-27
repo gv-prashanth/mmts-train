@@ -9,150 +9,95 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.vadrin.mmtstrain.models.AlexaCardAndSpeech;
-import com.vadrin.mmtstrain.models.AlexaResponse;
-import com.vadrin.mmtstrain.models.Chat;
-import com.vadrin.mmtstrain.models.Event;
-import com.vadrin.mmtstrain.models.InvalidStationNamesException;
+import com.vadrin.mmtstrain.models.Response;
+import com.vadrin.mmtstrain.models.Intent;
+import com.vadrin.mmtstrain.models.IntentName;
+import com.vadrin.mmtstrain.models.alexa.AlexaCardAndSpeech;
+import com.vadrin.mmtstrain.models.alexa.AlexaResponse;
 
 @Service
 public class AlexaService {
 
 	@Autowired
-	EventsHandlerService eventsHandlerService;
-  @Autowired
-  TrainScheduleService trainScheduleService;
+	ChatService chatService;
 	
-  private static final String GREET = "Hello! I can help you find a MMTS train.";
-  private static final String BYE = "Bye Bye! Happy Journey!";
-  private static final String HELP = "You can ask for a train from arts college to hitech city at 9AM.";
-  private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";
-  private static final String TROUBLE_UNDERSTANDING_STATION = "I am having trouble understanding the stations you have mentioned. Please try again.";
-
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
-//		if (alexaRequestBody.get("request").has("dialogState")
-//				&& !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
-//			return autoFetchSlots(alexaRequestBody);
-//		}
-		if (alexaRequestBody.get("request").get("type").asText().equalsIgnoreCase("IntentRequest")) {
-			Map<String, String> eventParams = new HashMap<String, String>();
-			alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(child -> {
-				try {
-					eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
-							.get(0).get("values").get(0).get("value").get("name").asText());
-				} catch (NullPointerException e) {
-					eventParams.put(child.get("name").asText(), child.get("value").asText());
-				}
-			});
-			Event input = new Event(alexaRequestBody.get("request").get("intent").get("name").asText(), eventParams);
-			Chat output = handleIntents(alexaRequestBody.get("session").get("sessionId").asText(), input);
-			return constructAlexaResponse(output);
-    } else {
-      Chat output = handleRequests(alexaRequestBody.get("session").get("sessionId").asText(), alexaRequestBody.get("request").get("type").asText());
-      AlexaResponse toReturn = constructAlexaResponse(output);
-      List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
-      Map<String, Object> updateIntent = new HashMap<String, Object>();
-      updateIntent.put("type", "Dialog.Delegate");
-      updateIntent.put("updatedIntent", "findTrain");
-      directives.add(updateIntent);
-      toReturn.getResponse().setDirectives(directives);
-      return toReturn;
+    String conversationId = alexaRequestBody.get("session").get("sessionId").asText();
+	  String requestType = alexaRequestBody.get("request").get("type").asText();
+    String alexaUsedIntentName= alexaRequestBody.get("request").get("intent").get("name").asText();
+    
+    //Arrive at intent name using intentrequest object. if not possible arrive using request type.
+    IntentName intentName = requestType.equalsIgnoreCase("IntentRequest") ? constructIntentName(alexaUsedIntentName) : constructIntentName(requestType);
+    Map<String, String> intentParams = constructIntentParams(alexaRequestBody);
+    Intent intent = new Intent(intentName, intentParams);
+    Response response = chatService.handleIntentRequest(conversationId, intent);
+    AlexaResponse toReturn =  constructAlexaResponse(response);
+		if (intentName == IntentName.LAUNCH) {
+		  addRedirectToFindTrainIntent(toReturn);
     }
+    return toReturn;
 	}
 
-	private AlexaResponse constructAlexaResponse(String response, boolean endSession) {
-		Map<String, Object> speech = new HashMap<String, Object>();
-		speech.put("type", "PlainText");
-		speech.put("text", response);
+  private void addRedirectToFindTrainIntent(AlexaResponse toReturn) {
+    List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
+    Map<String, Object> updateIntent = new HashMap<String, Object>();
+    updateIntent.put("type", "Dialog.Delegate");
+    updateIntent.put("updatedIntent", "findTrain");
+    directives.add(updateIntent);
+    toReturn.getResponse().setDirectives(directives);
+  }
 
-		Map<String, Object> card = new HashMap<String, Object>();
-		card.put("type", "Standard");
-		card.put("title", "MMTS Train");
-		card.put("text", response);
-
-		Map<String, Object> image = new HashMap<String, Object>();
-		image.put("smallImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
-		image.put("largeImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
-		card.put("image", image);
-		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-				new AlexaCardAndSpeech(speech, card, endSession, null));
-		System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
-		return toReturn;
-	}
-
-//	private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
-//		JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
-//		boolean cleared = false;
-//		try {
-//			if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-//					.get("code").asText().endsWith("NO_MATCH")) {
-//				((ObjectNode) toClearSlots.get("slots").get("from")).remove("value");
-//				((ObjectNode) toClearSlots.get("slots").get("from")).remove("resolutions");
-//				((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
-//				cleared = true;
-//			}
-//		}catch(NullPointerException e) {
-//			
-//		}
-//		try {
-//			if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-//					.get("code").asText().endsWith("NO_MATCH")) {
-//				((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
-//				((ObjectNode) toClearSlots.get("slots").get("to")).remove("resolutions");
-//				((ObjectNode) toClearSlots.get("slots").get("to")).remove("source");
-//				cleared = true;
-//			}
-//		}catch(NullPointerException e) {
-//			
-//		}
-//		List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
-//		Map<String, Object> autofetch = new HashMap<String, Object>();
-//		autofetch.put("type", "Dialog.Delegate");
-//		if (cleared)
-//			autofetch.put("updatedIntent", JsonService.getMapFromJson(toClearSlots));
-//		directives.add(autofetch);
-//		AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-//				new AlexaCardAndSpeech(null, null, false, directives));
-//		System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
-//		return toReturn;
-//	}
-
-	private AlexaResponse constructAlexaResponse(Chat chat) {
-		return constructAlexaResponse(chat.getMessage(), chat.isTheEnd());
-	}
-	
-
-  private Chat handleIntents(String conversationId, Event event) {
-    try{
-      switch (event.getName()) {
-      case "LaunchRequest":
-        return new Chat(GREET, false);
-      case "AMAZON.HelpIntent":
-        return new Chat(HELP, false);
-      case "findTrain":
-        return new Chat(eventsHandlerService.formatScheduleInEnglish(trainScheduleService.getSchedule(event.getInfo().get("from"),
-            event.getInfo().get("to"), event.getInfo().get("time"))), true);
-      case "AMAZON.CancelIntent":
-        return new Chat(BYE, true);
-      case "AMAZON.StopIntent":
-        return new Chat(BYE, true);
-      default:
-        return new Chat(TROUBLE_UNDERSTANDING, true);
-      }
-    }catch(InvalidStationNamesException ex){
-      return new Chat(TROUBLE_UNDERSTANDING_STATION, true);
+  private IntentName constructIntentName(String name) {
+    if(name.equalsIgnoreCase("findTrain")) {
+      return IntentName.FINDTRAIN;
+    }else if(name.equalsIgnoreCase("AMAZON.HelpIntent")) {
+      return IntentName.HELP;
+    }else if(name.equalsIgnoreCase("AMAZON.CancelIntent")) {
+      return IntentName.STOP;
+    }else if(name.equalsIgnoreCase("AMAZON.StopIntent")) {
+      return IntentName.STOP;
+    }else if (name.equalsIgnoreCase("LaunchRequest")) {
+      return IntentName.LAUNCH;
+    }else {
+      return IntentName.UNKNOWN;
     }
   }
 
-  private Chat handleRequests(String conversationId, String requestType) {
-    switch (requestType) {
-    case "LaunchRequest":
-      return new Chat(GREET, false);
-    case "SessionEndedRequest":
-      return new Chat(BYE, true);
-    default:
-      return new Chat(TROUBLE_UNDERSTANDING, true);
+  private Map<String, String> constructIntentParams(JsonNode alexaRequestBody) {
+    Map<String, String> eventParams = new HashMap<String, String>();
+    try {
+      alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(child -> {
+        try {
+          eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
+              .get(0).get("values").get(0).get("value").get("name").asText());
+        } catch (NullPointerException e) {
+          eventParams.put(child.get("name").asText(), child.get("value").asText());
+        }
+      });
+    } catch (NullPointerException e) {
+      //No params at all
     }
-  }
+    return eventParams;
+	}
+
+	private AlexaResponse constructAlexaResponse(Response response) {
+    Map<String, Object> speech = new HashMap<String, Object>();
+    speech.put("type", "PlainText");
+    speech.put("text", response.getMessage());
+
+    Map<String, Object> card = new HashMap<String, Object>();
+    card.put("type", "Standard");
+    card.put("title", "MMTS Train");
+    card.put("text", response.getMessage());
+
+    Map<String, Object> image = new HashMap<String, Object>();
+    image.put("smallImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
+    image.put("largeImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
+    card.put("image", image);
+    AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
+        new AlexaCardAndSpeech(speech, card, response.isTheEnd(), null));
+    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
+    return toReturn;
+	}
+
 }
