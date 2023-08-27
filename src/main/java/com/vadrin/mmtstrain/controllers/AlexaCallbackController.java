@@ -1,6 +1,7 @@
 package com.vadrin.mmtstrain.controllers;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,7 +25,7 @@ public class AlexaCallbackController {
 	@PostMapping("/callback/alexa")
 	public ResponseEntity<AlexaResponse> callback(HttpServletRequest request) {
 		try {
-	    JsonNode alexaRequestBody = JsonService.getJson(request.getInputStream().readAllBytes());
+	    JsonNode alexaRequestBody = JsonService.getJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 	    System.out.println("request is - " + alexaRequestBody.toString());
 	    return new ResponseEntity<>(alexaService.respond(alexaRequestBody), HttpStatus.OK);
 		} catch (IOException e) {
