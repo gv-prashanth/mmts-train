@@ -41,12 +41,24 @@
                         }
                     ],
                     "samples": [
+                        "at {time}",
+                        "to {to}",
+                        "from {from}",
+                        "source {from} destination {to} at {time}",
                         "from {from} to {to} around {time}",
                         "from {from} to {to} at {time}",
                         "im looking for M.M.T.S",
                         "find me a train",
                         "find me a M.M.T.S"
                     ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -572,7 +584,8 @@
                         }
                     ]
                 }
-            ]
+            ],
+            "delegationStrategy": "ALWAYS"
         },
         "prompts": [
             {
