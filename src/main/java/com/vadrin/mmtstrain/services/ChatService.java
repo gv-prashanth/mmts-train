@@ -1,15 +1,14 @@
 package com.vadrin.mmtstrain.services;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.Intent;
 import com.vadrin.mmtstrain.models.InvalidStationNamesException;
+import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.Train;
 
 @Service
