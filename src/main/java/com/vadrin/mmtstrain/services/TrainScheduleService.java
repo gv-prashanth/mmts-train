@@ -4,7 +4,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -39,7 +42,9 @@ public class TrainScheduleService {
     try {
       Train[] allTrains = getSchedule(fromId, toId, increaseHours(time, -15), increaseHours(time, 120));
       return Arrays.asList(allTrains).stream().filter(x -> {
-        if (DayOfWeek.SUNDAY == DayOfWeek.of(LocalDate.now().get(ChronoField.DAY_OF_WEEK))) {
+        Instant now = Instant.now();
+        ZonedDateTime india = now.atZone(ZoneId.of("Asia/Kolkata"));
+        if (DayOfWeek.SUNDAY == DayOfWeek.of(india.get(ChronoField.DAY_OF_WEEK))) {
           return x.getRunsonweekend().equalsIgnoreCase("y");
         } else {
           return true;
