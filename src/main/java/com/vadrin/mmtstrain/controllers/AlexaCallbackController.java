@@ -1,8 +1,6 @@
 package com.vadrin.mmtstrain.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,10 +16,10 @@ public class AlexaCallbackController {
 	AlexaService alexaService;
 
   @PostMapping("/callback/alexa")
-  public ResponseEntity<AlexaResponse> callback(@RequestBody JsonNode alexaRequestBody) {
+  public AlexaResponse callback(@RequestBody JsonNode alexaRequestBody) {
     // JsonNode alexaRequestBody = JsonService.getJson(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
     System.out.println("request is - " + alexaRequestBody.toString());
-    return new ResponseEntity<>(alexaService.respond(alexaRequestBody), HttpStatus.OK);
+    return alexaService.respond(alexaRequestBody);
   }
 
 }
