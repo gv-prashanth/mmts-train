@@ -24,10 +24,9 @@ public class AlexaService {
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
     String conversationId = alexaRequestBody.get("session").get("sessionId").asText();
 	  String requestType = alexaRequestBody.get("request").get("type").asText();
-    String alexaUsedIntentName= alexaRequestBody.get("request").get("intent").get("name").asText();
-    
+
     //Arrive at intent name using intentrequest object. if not possible arrive using request type.
-    IntentName intentName = requestType.equalsIgnoreCase("IntentRequest") ? constructIntentName(alexaUsedIntentName) : constructIntentName(requestType);
+    IntentName intentName = requestType.equalsIgnoreCase("IntentRequest") ? constructIntentName(alexaRequestBody.get("request").get("intent").get("name").asText()) : constructIntentName(requestType);
     Map<String, String> intentParams = constructIntentParams(alexaRequestBody);
     Intent intent = new Intent(intentName, intentParams);
     Response response = chatService.handleIntentRequest(conversationId, intent);
