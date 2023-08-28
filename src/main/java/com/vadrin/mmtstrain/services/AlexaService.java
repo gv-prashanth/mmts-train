@@ -27,21 +27,21 @@ public class AlexaService {
 
     //Arrive at intent name using intentrequest object. if not possible arrive using request type.
     IntentName intentName = requestType.equalsIgnoreCase("IntentRequest") ? constructIntentName(alexaRequestBody.get("request").get("intent").get("name").asText()) : constructIntentName(requestType);
-    Map<String, String> intentParams = constructIntentParams(alexaRequestBody);
-    Intent intent = new Intent(intentName, intentParams);
+    Map<String, String> slots = constructIntentSlots(alexaRequestBody);
+    Intent intent = new Intent(intentName, slots);
     Response response = chatService.handleIntentRequest(conversationId, intent);
     AlexaResponse toReturn =  constructAlexaResponse(response);
 		if (intentName == IntentName.LAUNCH) {
-		  addRedirectToFindTrainIntent(toReturn);
+		  addDirectiveToAnotherIntent(toReturn, "findTrain");
     }
     return toReturn;
 	}
 
-  private void addRedirectToFindTrainIntent(AlexaResponse toReturn) {
+  private void addDirectiveToAnotherIntent(AlexaResponse toReturn, String intentToRedirect) {
     List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
     Map<String, Object> updateIntent = new HashMap<String, Object>();
     updateIntent.put("type", "Dialog.Delegate");
-    updateIntent.put("updatedIntent", "findTrain");
+    updateIntent.put("updatedIntent", intentToRedirect);
     directives.add(updateIntent);
     toReturn.getResponse().setDirectives(directives);
   }
@@ -62,21 +62,21 @@ public class AlexaService {
     }
   }
 
-  private Map<String, String> constructIntentParams(JsonNode alexaRequestBody) {
-    Map<String, String> eventParams = new HashMap<String, String>();
+  private Map<String, String> constructIntentSlots(JsonNode alexaRequestBody) {
+    Map<String, String> slots = new HashMap<String, String>();
     try {
       alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(child -> {
         try {
-          eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
+          slots.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
               .get(0).get("values").get(0).get("value").get("name").asText());
         } catch (NullPointerException e) {
-          eventParams.put(child.get("name").asText(), child.get("value").asText());
+          slots.put(child.get("name").asText(), child.get("value").asText());
         }
       });
     } catch (NullPointerException e) {
       //No params at all
     }
-    return eventParams;
+    return slots;
 	}
 
 	private AlexaResponse constructAlexaResponse(Response response) {

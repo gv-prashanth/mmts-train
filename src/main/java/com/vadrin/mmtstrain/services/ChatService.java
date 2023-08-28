@@ -30,8 +30,8 @@ public class ChatService {
       return new Response(HELPTEXT, false);
     case FINDTRAIN: {
       try {
-        return new Response(formatScheduleInEnglish(trainScheduleService.getSchedule(intent.getInfo().get("from"),
-            intent.getInfo().get("to"), intent.getInfo().get("time"))), true);
+        return new Response(formatScheduleInEnglish(trainScheduleService.getSchedule(intent.getSlots().get("from"),
+            intent.getSlots().get("to"), intent.getSlots().get("time"))), true);
       } catch (InvalidStationNamesException ex) {
         return new Response(TROUBLE_UNDERSTANDING_STATION, true);
       }
