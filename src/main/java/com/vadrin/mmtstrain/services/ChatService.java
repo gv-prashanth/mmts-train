@@ -14,7 +14,7 @@ import com.vadrin.mmtstrain.models.Train;
 @Service
 public class ChatService {
   
-  private static final String GREET = "Hello! I can help you find a MMTS train.";
+  private static final String GREET = "Hello! I can help you find a MMTS train. What is your source station?";
   private static final String BYE = "Bye Bye! Happy Journey!";
   private static final String HELPTEXT = "You can ask for a train from arts college to hitech city at 9AM.";
   private static final String TROUBLE_UNDERSTANDING = "I am having trouble understanding you. Please try later.";

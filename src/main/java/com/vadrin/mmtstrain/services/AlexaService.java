@@ -1,18 +1,15 @@
 package com.vadrin.mmtstrain.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.Intent;
 import com.vadrin.mmtstrain.models.IntentName;
+import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.alexa.AlexaCardAndSpeech;
 import com.vadrin.mmtstrain.models.alexa.AlexaResponse;
 
@@ -23,10 +20,6 @@ public class AlexaService {
 	ChatService chatService;
 	
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
-    if (alexaRequestBody.get("request").has("dialogState")
-        && !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
-      return autoFetchSlots(alexaRequestBody);
-    }
     String conversationId = alexaRequestBody.get("session").get("sessionId").asText();
 	  String requestType = alexaRequestBody.get("request").get("type").asText();
 
@@ -36,20 +29,8 @@ public class AlexaService {
     Intent intent = new Intent(intentName, slots);
     Response response = chatService.handleIntentRequest(conversationId, intent);
     AlexaResponse toReturn =  constructAlexaResponse(response);
-		if (intentName == IntentName.LAUNCH) {
-		  addDirectiveToAnotherIntent(toReturn, "findTrain");
-    }
     return toReturn;
 	}
-
-  private void addDirectiveToAnotherIntent(AlexaResponse toReturn, String intentToRedirect) {
-    List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
-    Map<String, Object> updateIntent = new HashMap<String, Object>();
-    updateIntent.put("type", "Dialog.Delegate");
-    updateIntent.put("updatedIntent", intentToRedirect);
-    directives.add(updateIntent);
-    toReturn.getResponse().setDirectives(directives);
-  }
 
   private IntentName constructIntentName(String name) {
     if(name.equalsIgnoreCase("findTrain")) {
@@ -103,42 +84,5 @@ public class AlexaService {
     System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
     return toReturn;
 	}
-
-  private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
-    JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
-    boolean cleared = false;
-    try {
-      if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-          .get("code").asText().endsWith("NO_MATCH")) {
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("value");
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("resolutions");
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
-        cleared = true;
-      }
-    } catch (NullPointerException e) {
-
-    }
-    try {
-      if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-          .get("code").asText().endsWith("NO_MATCH")) {
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("resolutions");
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("source");
-        cleared = true;
-      }
-    } catch (NullPointerException e) {
-
-    }
-    List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
-    Map<String, Object> autofetch = new HashMap<String, Object>();
-    autofetch.put("type", "Dialog.Delegate");
-    if (cleared)
-      autofetch.put("updatedIntent", JsonService.getMapFromJson(toClearSlots));
-    directives.add(autofetch);
-    AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-        new AlexaCardAndSpeech(null, null, false, directives));
-    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
-    return toReturn;
-  }
 
 }
