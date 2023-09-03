@@ -34,6 +34,7 @@ public class AlexaService {
 		if (intentName == IntentName.LAUNCH) {
 		  toReturn.setResponse(addDirectiveToAnotherIntent(toReturn.getResponse(), "findTrain"));
     }
+    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
     return toReturn;
 	}
 
@@ -96,7 +97,6 @@ public class AlexaService {
     card.put("image", image);
     AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
         new AlexaCardAndSpeech(speech, card, response.isTheEnd(), null));
-    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
     return toReturn;
 	}
 
