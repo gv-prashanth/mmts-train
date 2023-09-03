@@ -41,13 +41,6 @@
                         }
                     ],
                     "samples": [
-                        "check for mmts from {from}",
-                        "check for a train from {from}",
-                        "get me a train from {from}",
-                        "get me a train from {from} to {to} at {time}",
-                        "find mmts from {from} to {to} at {time}",
-                        "find train from {from} to {to} at {time}",
-                        "find train from {from} to {to} around {time}",
                         "at {time}",
                         "to {to}",
                         "from {from}",
@@ -118,7 +111,6 @@
                             "name": {
                                 "value": "bharatnagar",
                                 "synonyms": [
-                                    "bharat nagar",
                                     "bharatnagar"
                                 ]
                             }
@@ -135,7 +127,6 @@
                             "name": {
                                 "value": "bibinagar jn",
                                 "synonyms": [
-                                    "bibinagar",
                                     "bibinagar jn"
                                 ]
                             }
@@ -160,7 +151,6 @@
                             "name": {
                                 "value": "borabanda",
                                 "synonyms": [
-                                    "bora banda",
                                     "borabanda"
                                 ]
                             }
@@ -217,7 +207,6 @@
                             "name": {
                                 "value": "dayanandnagar",
                                 "synonyms": [
-                                    "dayanand nagar",
                                     "dayanandnagar"
                                 ]
                             }
@@ -234,8 +223,6 @@
                             "name": {
                                 "value": "fatehnagar",
                                 "synonyms": [
-                                    "fathe nagar",
-                                    "fateh nagar",
                                     "fatehnagar"
                                 ]
                             }
@@ -252,7 +239,6 @@
                             "name": {
                                 "value": "ghatkesar",
                                 "synonyms": [
-                                    "gatkesar",
                                     "ghatkesar"
                                 ]
                             }
@@ -311,9 +297,6 @@
                             "name": {
                                 "value": "jamai osmania",
                                 "synonyms": [
-                                    "jamosmania",
-                                    "jham osmania",
-                                    "jam osmani",
                                     "jamai osmania"
                                 ]
                             }
@@ -346,7 +329,6 @@
                             "name": {
                                 "value": "kazipet jn",
                                 "synonyms": [
-                                    "kazipet",
                                     "kazipet jn"
                                 ]
                             }
@@ -499,7 +481,6 @@
                             "name": {
                                 "value": "sanjeevaiah park",
                                 "synonyms": [
-                                    "sanjevaiya park",
                                     "sanjeevaiah park"
                                 ]
                             }
@@ -527,7 +508,6 @@
                             "name": {
                                 "value": "umdanagar",
                                 "synonyms": [
-                                    "umda nagar",
                                     "umdanagar"
                                 ]
                             }
@@ -536,7 +516,6 @@
                             "name": {
                                 "value": "vidyanagar",
                                 "synonyms": [
-                                    "vidya nagar",
                                     "vidyanagar"
                                 ]
                             }
