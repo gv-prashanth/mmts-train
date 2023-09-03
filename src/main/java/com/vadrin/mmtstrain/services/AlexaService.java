@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.Intent;
 import com.vadrin.mmtstrain.models.IntentName;
@@ -23,32 +22,26 @@ public class AlexaService {
 	ChatService chatService;
 	
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
-	  
-    if (alexaRequestBody.get("request").has("dialogState")
-        && !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
-      return autoFetchSlots(alexaRequestBody);
-    }
-    
     String conversationId = alexaRequestBody.get("session").get("sessionId").asText();
 	  String requestType = alexaRequestBody.get("request").get("type").asText();
 
     //Arrive at intent name using intentrequest object. if not possible arrive using request type.
     IntentName intentName = requestType.equalsIgnoreCase("IntentRequest") ? constructIntentName(alexaRequestBody.get("request").get("intent").get("name").asText()) : constructIntentName(requestType);
-    Map<String, String> intentParams = constructIntentParams(alexaRequestBody);
-    Intent intent = new Intent(intentName, intentParams);
+    Map<String, String> slots = constructIntentSlots(alexaRequestBody);
+    Intent intent = new Intent(intentName, slots);
     Response response = chatService.handleIntentRequest(conversationId, intent);
     AlexaResponse toReturn =  constructAlexaResponse(response);
 		if (intentName == IntentName.LAUNCH) {
-		  addRedirectToFindTrainIntent(toReturn);
+		  addDirectiveToAnotherIntent(toReturn, "findTrain");
     }
     return toReturn;
 	}
 
-  private void addRedirectToFindTrainIntent(AlexaResponse toReturn) {
+  private void addDirectiveToAnotherIntent(AlexaResponse toReturn, String intentToRedirect) {
     List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
     Map<String, Object> updateIntent = new HashMap<String, Object>();
     updateIntent.put("type", "Dialog.Delegate");
-    updateIntent.put("updatedIntent", "findTrain");
+    updateIntent.put("updatedIntent", intentToRedirect);
     directives.add(updateIntent);
     toReturn.getResponse().setDirectives(directives);
   }
@@ -69,21 +62,21 @@ public class AlexaService {
     }
   }
 
-  private Map<String, String> constructIntentParams(JsonNode alexaRequestBody) {
-    Map<String, String> eventParams = new HashMap<String, String>();
+  private Map<String, String> constructIntentSlots(JsonNode alexaRequestBody) {
+    Map<String, String> slots = new HashMap<String, String>();
     try {
       alexaRequestBody.get("request").get("intent").get("slots").elements().forEachRemaining(child -> {
         try {
-          eventParams.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
+          slots.put(child.get("name").asText(), child.get("resolutions").get("resolutionsPerAuthority")
               .get(0).get("values").get(0).get("value").get("name").asText());
         } catch (NullPointerException e) {
-          eventParams.put(child.get("name").asText(), child.get("value").asText());
+          slots.put(child.get("name").asText(), child.get("value").asText());
         }
       });
     } catch (NullPointerException e) {
       //No params at all
     }
-    return eventParams;
+    return slots;
 	}
 
 	private AlexaResponse constructAlexaResponse(Response response) {
@@ -97,8 +90,8 @@ public class AlexaService {
     card.put("text", response.getMessage());
 
     Map<String, Object> image = new HashMap<String, Object>();
-    image.put("smallImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
-    image.put("largeImageUrl", "https://mmts-train.vadrin.com/images/icon.png");
+    image.put("smallImageUrl", "https://mmts-train.vadrin.com/images/iconSmall.png");
+    image.put("largeImageUrl", "https://mmts-train.vadrin.com/images/iconMedium.png");
     card.put("image", image);
     AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
         new AlexaCardAndSpeech(speech, card, response.isTheEnd(), null));
@@ -106,40 +99,4 @@ public class AlexaService {
     return toReturn;
 	}
 
-  private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
-    JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
-    boolean cleared = false;
-    try {
-      if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-          .get("code").asText().endsWith("NO_MATCH")) {
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("value");
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("resolutions");
-        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
-        cleared = true;
-      }
-    } catch (NullPointerException e) {
-
-    }
-    try {
-      if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
-          .get("code").asText().endsWith("NO_MATCH")) {
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("resolutions");
-        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("source");
-        cleared = true;
-      }
-    } catch (NullPointerException e) {
-
-    }
-    List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
-    Map<String, Object> autofetch = new HashMap<String, Object>();
-    autofetch.put("type", "Dialog.Delegate");
-    if (cleared)
-      autofetch.put("updatedIntent", JsonService.getMapFromJson(toClearSlots));
-    directives.add(autofetch);
-    AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
-        new AlexaCardAndSpeech(null, null, false, directives));
-    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
-    return toReturn;
-  }
 }
