@@ -32,18 +32,19 @@ public class AlexaService {
     Response response = chatService.handleIntentRequest(conversationId, intent);
     AlexaResponse toReturn =  constructAlexaResponse(response);
 		if (intentName == IntentName.LAUNCH) {
-		  addDirectiveToAnotherIntent(toReturn, "findTrain");
+		  toReturn.setResponse(addDirectiveToAnotherIntent(toReturn.getResponse(), "findTrain"));
     }
     return toReturn;
 	}
 
-  private void addDirectiveToAnotherIntent(AlexaResponse toReturn, String intentToRedirect) {
+  private AlexaCardAndSpeech addDirectiveToAnotherIntent(AlexaCardAndSpeech x, String intentToRedirect) {
     List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
     Map<String, Object> updateIntent = new HashMap<String, Object>();
     updateIntent.put("type", "Dialog.Delegate");
     updateIntent.put("updatedIntent", intentToRedirect);
     directives.add(updateIntent);
-    toReturn.getResponse().setDirectives(directives);
+    x.setDirectives(directives);
+    return x;
   }
 
   private IntentName constructIntentName(String name) {
