@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vadrin.mmtstrain.models.Response;
 import com.vadrin.mmtstrain.models.Intent;
 import com.vadrin.mmtstrain.models.IntentName;
@@ -22,6 +23,12 @@ public class AlexaService {
 	ChatService chatService;
 	
 	public AlexaResponse respond(JsonNode alexaRequestBody) {
+	  
+    if (alexaRequestBody.get("request").has("dialogState")
+        && !alexaRequestBody.get("request").get("dialogState").asText().equalsIgnoreCase("COMPLETED")) {
+      return autoFetchSlots(alexaRequestBody);
+    }
+    
     String conversationId = alexaRequestBody.get("session").get("sessionId").asText();
 	  String requestType = alexaRequestBody.get("request").get("type").asText();
 
@@ -99,4 +106,40 @@ public class AlexaService {
     return toReturn;
 	}
 
+  private AlexaResponse autoFetchSlots(JsonNode alexaRequestBody) {
+    JsonNode toClearSlots = alexaRequestBody.get("request").get("intent");
+    boolean cleared = false;
+    try {
+      if (toClearSlots.get("slots").get("from").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+          .get("code").asText().endsWith("NO_MATCH")) {
+        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("value");
+        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("resolutions");
+        ((ObjectNode) toClearSlots.get("slots").get("from")).remove("source");
+        cleared = true;
+      }
+    } catch (NullPointerException e) {
+
+    }
+    try {
+      if (toClearSlots.get("slots").get("to").get("resolutions").get("resolutionsPerAuthority").get(0).get("status")
+          .get("code").asText().endsWith("NO_MATCH")) {
+        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("value");
+        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("resolutions");
+        ((ObjectNode) toClearSlots.get("slots").get("to")).remove("source");
+        cleared = true;
+      }
+    } catch (NullPointerException e) {
+
+    }
+    List<Map<String, Object>> directives = new ArrayList<Map<String, Object>>();
+    Map<String, Object> autofetch = new HashMap<String, Object>();
+    autofetch.put("type", "Dialog.Delegate");
+    if (cleared)
+      autofetch.put("updatedIntent", JsonService.getMapFromJson(toClearSlots));
+    directives.add(autofetch);
+    AlexaResponse toReturn = new AlexaResponse("1.0", new HashMap<String, Object>(),
+        new AlexaCardAndSpeech(null, null, false, directives));
+    System.out.println("respose is - " + JsonService.getJson(toReturn).toString());
+    return toReturn;
+  }
 }
